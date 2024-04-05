@@ -8,16 +8,6 @@ class Boot {
     {
         register_activation_hook( $pluginFilePath, 'activate{{pluginName}}' );
         register_deactivation_hook( $pluginFilePath, 'deactivate{{pluginName}}' );
-        register_install_hook( $pluginFilePath, 'install{{pluginName}}' );
-        register_uninstall_hook( $pluginFilePath, 'uninstall{{pluginName}}' );
-    }
-
-    public static function install{{pluginName}}() {
-        //TODO CODE
-    }
-
-    public static function uninstall{{pluginName}}() {
-        //TODO CODE
     }
 
     public static function activate{{pluginName}}() {

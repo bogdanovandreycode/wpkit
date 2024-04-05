@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/vendor/autoload.php';
 require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 
-use {{namespace}}\Boot.php;
-use {{namespace}}\Main.php;
+use {{namespace}}\Boot;
+use {{namespace}}\Main;
 
 new Boot(__FILE__);
 

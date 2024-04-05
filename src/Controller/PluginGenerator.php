@@ -17,8 +17,8 @@ class PluginGenerator
     public function generate(): void
     {
         $this->createComposerProject();
-        $this->changeComposerJson();
         $this->createDirectoryStructure();
+        $this->changeComposerJson();
         TemplateEngine::generate('Main.template', $this->arguments, 'src/Main.php');
         TemplateEngine::generate('Boot.template', $this->arguments, 'src/Boot.php');
         $pluginName = ArgumentManager::getValueByName($this->arguments, "pluginName");
@@ -31,7 +31,7 @@ class PluginGenerator
         $pluginName = ArgumentManager::getValueByName($this->arguments, "pluginName");
         $author = ArgumentManager::getValueByName($this->arguments, "author");
         $phpVersion = ArgumentManager::getValueByName($this->arguments, "phpVersion");
-        $license = ArgumentManager::getValueByName($this->arguments, "phpVersion");
+        $license = ArgumentManager::getValueByName($this->arguments, "license");
 
         if (!file_exists($composerFile)) {
             shell_exec("composer init --name {$pluginName} --author \"{$author}\" --type wordpress-plugin --require php:^{$phpVersion} --stability dev --license {$license}");
@@ -41,9 +41,13 @@ class PluginGenerator
     private function changeComposerJson(): void
     {
         $composerJsonPath = getcwd() . '/composer.json';
+
+        if (empty($composerJsonPath)) {
+            return;
+        }
+
         $composerConfig = json_decode(file_get_contents($composerJsonPath), true);
         $namespace = ArgumentManager::getValueByName($this->arguments, "namespace");
-
         $composerConfig['autoload'] = [
             'psr-4' => ["{$namespace}\\" => "src/"]
         ];
@@ -62,8 +66,10 @@ class PluginGenerator
 
     private function makeDirectory($path): void
     {
-        if (!file_exists($path)) {
-            mkdir(getcwd() . '/' . $path, 0777, true);
+        $fullPath = getcwd() . '/' . $path;
+
+        if (!file_exists($fullPath)) {
+            mkdir($fullPath, 0777, true);
         }
     }
 }

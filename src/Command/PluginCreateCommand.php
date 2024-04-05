@@ -23,69 +23,69 @@ class PluginCreateCommand extends Command
         $this->arguments = [
             new ArgumentModel(
                 'pluginName',
-                'The name of the plugin, as it will be displayed in the WordPress admin panel.',
+                "PluginName. The name of the plugin, as it will be displayed in the WordPress admin panel",
                 true
             ),
             new ArgumentModel(
                 'vendor',
-                'The name of the directory where all the libraries and dependencies of your project downloaded via Composer are stored.',
+                "Vendor. The name of the directory where all the libraries and dependencies of your project downloaded via Composer are stored",
                 true
             ),
             new ArgumentModel(
                 'namespace',
-                'Common namespace for plugin classes.',
-                true
-            ),
-            new ArgumentModel(
-                'phpVersion',
-                'Minimum PHP version required to run the plugin.',
-                '8.0',
+                "Namespace. Common namespace for plugin classes",
                 true
             ),
             new ArgumentModel(
                 'author',
-                'The name of the plugin\'s author.',
+                "Author. The name of the plugin\'s author",
                 true
             ),
             new ArgumentModel(
                 'authorURI',
-                'Link to the author\'s website.',
+                "Author URI. Link to the author\'s website",
             ),
             new ArgumentModel(
                 'description',
-                'A brief description of what the plugin does.'
+                "Description. A brief description of what the plugin does"
             ),
             new ArgumentModel(
                 'pluginURI',
-                'A link to the plugin page where users can find additional information about the plugin.'
+                "Plugin URI. A link to the plugin page where users can find additional information about the plugin"
             ),
             new ArgumentModel(
                 'version',
-                'The current version of the plugin.',
+                "Version. The current version of the plugin",
                 false,
                 '1.0'
             ),
             new ArgumentModel(
+                'phpVersion',
+                "PHP version. Minimum PHP version required to run the plugin",
+                false,
+                '8.0'
+            ),
+            new ArgumentModel(
                 'license',
-                'The type of plugin license, most often GPL2.',
+                "License. The type of plugin license, most often GPL2",
                 false,
                 'GPL2'
             ),
             new ArgumentModel(
                 'licenseURI',
-                'Link to the website of license.',
+                "License URI. Link to the website of license",
                 false,
                 'https://www.gnu.org/licenses/gpl-2.0.html'
             ),
             new ArgumentModel(
                 'textDomain',
-                'The ID of the text domain for localization of the plugin.',
+                "Text Domain. The ID of the text domain for localization of the plugin",
                 false,
                 'text-domain'
             ),
             new ArgumentModel(
                 'domainPath',
-                'The path to the folder with translations.',
+                "Domain Path. The path to the folder with translations",
                 false,
                 '/languages'
             ),
@@ -109,8 +109,10 @@ class PluginCreateCommand extends Command
 
         while ($index < $argumentLength) {
             $argument = $this->arguments[$index];
-            $questionText = empty($argument->description) ?  "Arg {$argument->value}" : $argument->description;
-            $questionText .= empty($argument->value) ? '' : "[{$argument->value}]";
+            $questionText = $argument->required ? '*' : '';
+            $questionText .= empty($argument->description) ? "Argument {$argument->value}" : $argument->description;
+            $questionText .= empty($argument->value) ? '' : " [{$argument->value}]";
+            $questionText .= ":\n";
             $question = new Question($questionText);
             $result = $helper->ask($input, $output, $question);
 
@@ -118,6 +120,7 @@ class PluginCreateCommand extends Command
                 continue;
             }
 
+            $argument->value = empty($result) ? $argument->value : $result;
             $index++;
         }
 

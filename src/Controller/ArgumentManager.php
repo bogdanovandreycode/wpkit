@@ -12,7 +12,7 @@ class ArgumentManager
     public static function getValueByName(array $arguments, string $name): mixed
     {
         foreach ($arguments as $argument) {
-            if ($argument->name === $name) {
+            if ($argument->name == $name) {
                 return $argument->value;
             }
         }
