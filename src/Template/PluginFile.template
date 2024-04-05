@@ -1,0 +1,35 @@
+<?php
+/*
+Plugin Name: {{pluginName}}
+Plugin URI: {{pluginURI}}
+Description: {{description}}
+Version: {{version}}
+Author: {{author}}
+Author URI: {{authorURI}}
+License: {{license}}
+License URI: {{licenseURI}}
+Text Domain: {{textDomain}}
+Domain Path: {{domainPath}}
+*/
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+require_once __DIR__ . '/vendor/autoload.php';
+require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+
+use {{namespace}}\Boot.php;
+use {{namespace}}\Main.php;
+
+new Boot(__FILE__);
+
+add_action('plugins_loaded', function () {
+    load_plugin_textdomain(
+        '{{pluginName}}-plugin',
+        false,
+        '/{{pluginName}}{{domainPath}}/'
+    );
+
+    new Main();
+});

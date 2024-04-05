@@ -1,0 +1,17 @@
+{
+    "name": "dadadam/wpkit",
+    "autoload": {
+        "psr-4": {
+            "Wpkit\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dadadam",
+            "email": "bogdanov.andrey.code@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "^7.0"
+    }
+}
