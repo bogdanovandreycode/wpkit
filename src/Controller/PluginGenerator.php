@@ -16,6 +16,14 @@ class PluginGenerator
 
     public function generate(): void
     {
+        $pluginName = ArgumentManager::getValueByName($this->arguments, "pluginName");
+        $baseDir = getcwd() . '/' . $pluginName;
+
+        if (!file_exists($baseDir)) {
+            mkdir($baseDir, 0777, true);
+        }
+
+        chdir($baseDir);
         $this->createComposerProject();
         $this->createDirectoryStructure();
         $this->changeComposerJson();
