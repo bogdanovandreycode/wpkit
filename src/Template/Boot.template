@@ -6,15 +6,15 @@ class Boot {
         private string $pluginFilePath,
     )
     {
-        register_activation_hook( $pluginFilePath, 'activate{{pluginName}}' );
-        register_deactivation_hook( $pluginFilePath, 'deactivate{{pluginName}}' );
+        register_activation_hook( $pluginFilePath, [$this, 'activate_{{pluginName}}'] );
+        register_deactivation_hook( $pluginFilePath, [$this, 'deactivate_{{pluginName}}'] );
     }
 
-    public static function activate{{pluginName}}() {
+    public static function activate_{{pluginName}}() {
         //TODO CODE
     }
 
-    public static function deactivate{{pluginName}}() {
+    public static function deactivate_{{pluginName}}() {
         //TODO CODE
     }
 }

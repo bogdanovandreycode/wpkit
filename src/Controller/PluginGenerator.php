@@ -29,12 +29,13 @@ class PluginGenerator
     {
         $composerFile = getcwd() . '/composer.json';
         $pluginName = ArgumentManager::getValueByName($this->arguments, "pluginName");
+        $vendor = ArgumentManager::getValueByName($this->arguments, "vendor");
         $author = ArgumentManager::getValueByName($this->arguments, "author");
         $phpVersion = ArgumentManager::getValueByName($this->arguments, "phpVersion");
         $license = ArgumentManager::getValueByName($this->arguments, "license");
 
         if (!file_exists($composerFile)) {
-            shell_exec("composer init --name {$pluginName} --author \"{$author}\" --type wordpress-plugin --require php:^{$phpVersion} --stability dev --license {$license}");
+            shell_exec("composer init --name {$vendor}/{$pluginName} --author \"{$author}\" --type wordpress-plugin --require php:^{$phpVersion} --stability dev --license {$license}");
         }
     }
 

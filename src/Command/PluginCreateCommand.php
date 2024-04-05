@@ -10,6 +10,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
+use Wpkit\Controller\ArgumentManager;
 
 class PluginCreateCommand extends Command
 {
@@ -32,11 +33,6 @@ class PluginCreateCommand extends Command
                 true
             ),
             new ArgumentModel(
-                'namespace',
-                "Namespace. Common namespace for plugin classes",
-                true
-            ),
-            new ArgumentModel(
                 'author',
                 "Author. The name of the plugin\'s author",
                 true
@@ -44,6 +40,10 @@ class PluginCreateCommand extends Command
             new ArgumentModel(
                 'authorURI',
                 "Author URI. Link to the author\'s website",
+            ),
+            new ArgumentModel(
+                'namespace',
+                "Namespace. Common namespace for plugin classes",
             ),
             new ArgumentModel(
                 'description',
@@ -109,6 +109,11 @@ class PluginCreateCommand extends Command
 
         while ($index < $argumentLength) {
             $argument = $this->arguments[$index];
+
+            if ($argument->name == "namespace") {
+                $argument->value = ArgumentManager::getValueByName($this->arguments, 'pluginName');
+            }
+
             $questionText = $argument->required ? '*' : '';
             $questionText .= empty($argument->description) ? "Argument {$argument->value}" : $argument->description;
             $questionText .= empty($argument->value) ? '' : " [{$argument->value}]";
