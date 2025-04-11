@@ -1,5 +1,7 @@
 {
     "name": "dadadam/wpkit",
+    "type": "library",
+    "description": "CLI support for WP Tool Kit.",
     "autoload": {
         "psr-4": {
             "Wpkit\\": "src/"
@@ -7,11 +9,14 @@
     },
     "authors": [
         {
-            "name": "Dadadam",
+            "name": "Andrey Bogdanov",
             "email": "bogdanov.andrey.code@gmail.com"
         }
     ],
     "require": {
         "symfony/console": "^7.0"
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "license": "MIT"
 }
