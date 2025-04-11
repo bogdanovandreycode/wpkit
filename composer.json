@@ -18,5 +18,8 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "bin": [
+        "wpkit"
+    ],
     "license": "MIT"
 }
