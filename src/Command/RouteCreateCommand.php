@@ -58,7 +58,9 @@ class RouteCreateCommand extends Command
     private function generateRouteController(array $data, OutputInterface $output): void
     {
         $templatePath = __DIR__ . '/../Template/route.template';
-        $targetPath = __DIR__ . '/../../' . str_replace('\\', '/', $data['namespace']) . '/' . $data['className'] . '.php';
+        $projectRoot = getcwd(); // путь где ты запускаешь wpkit, то есть твой плагин
+        $relativePath = 'src/' . str_replace('\\', '/', $data['namespace']);
+        $targetPath = $projectRoot . '/' . $relativePath . '/' . $data['className'] . '.php';
 
         if (!file_exists($templatePath)) {
             $output->writeln("<error>Template file not found: {$templatePath}</error>");
