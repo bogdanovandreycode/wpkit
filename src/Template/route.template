@@ -1,0 +1,32 @@
+<?php
+
+namespace {{namespace}};
+
+use WP_REST_Request;
+use WP_REST_Response;
+use WpToolKit\Controller\RouteController;
+use WpToolKit\Interface\RestRouteInterface;
+use WpToolKit\Attribute\Route;
+
+#[Route]
+class {{className}} extends RouteController implements RestRouteInterface
+{
+    public function __construct()
+    {
+        parent::__construct(
+            '{{routeNamespace}}',
+            '{{routePath}}',
+            []
+        );
+    }
+
+    public function callback(WP_REST_Request $request): mixed
+    {
+        return new WP_REST_Response('Success', 200);
+    }
+
+    public function checkPermission(WP_REST_Request $request): bool
+    {
+        return true;
+    }
+}
