@@ -1,5 +1,5 @@
 {
-    "name": "dadadam/wpkit",
+    "name": "arraydev/wpkit",
     "type": "library",
     "description": "CLI support for WP Tool Kit.",
     "autoload": {
