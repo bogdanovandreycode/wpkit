@@ -1,7 +1,7 @@
 {
     "name": "arraydev/wpkit",
     "type": "library",
-    "version": "v1.1.13-beta",
+    "version": "v1.1.14-beta",
     "description": "CLI support for WP Tool Kit.",
     "autoload": {
         "psr-4": {

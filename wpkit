@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../../autoload.php';
 
+use Wpkit\Command\LintCheckCommand;
 use Wpkit\Command\RouteCreateCommand;
 use Wpkit\Command\PluginCreateCommand;
 use Wpkit\Command\NamespaceUpdateCommand;
@@ -16,5 +17,6 @@ $application->add(new NamespaceUpdateCommand());
 $application->add(new RouteCreateCommand());
 $application->add(new PluginCreateFromFileCommand());
 $application->add(new PluginInitConfigCommand());
+$application->add(new LintCheckCommand());
 
 $application->run();
