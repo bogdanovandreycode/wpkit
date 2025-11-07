@@ -76,6 +76,7 @@ class PluginGenerator
         $domainPath = ArgumentManager::getValueByName($this->arguments, "domainPath");
         $this->makeDirectory($domainPath);
         $this->makeDirectory('assets');
+        $this->makeDirectory('config');
     }
 
     private function makeDirectory(string $path): void

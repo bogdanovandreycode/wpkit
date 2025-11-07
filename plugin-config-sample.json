@@ -1,9 +1,9 @@
 {
     "pluginName": "awesome-plugin",
-    "vendor": "Your vendor",
-    "author": "Your name",
+    "vendor": "Your_vendor",
+    "author": "Your_name",
     "authorURI": "https://site.io",
-    "namespace": "Arraydev\\Awesome",
+    "namespace": "Awesome",
     "description": "Example plugin created from JSON config",
     "pluginURI": "https://site.io/plugins/awesome",
     "version": "1.0",

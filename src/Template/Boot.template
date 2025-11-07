@@ -9,6 +9,8 @@ class Boot {
     public function __construct(
         private string $pluginFilePath,
     ) {
+        $this->setUp_{{pluginName}}();
+
         add_action('init', [$this, 'hookInit_{{pluginName}}']);
 
         add_action('plugins_loaded', function () {
@@ -25,15 +27,20 @@ class Boot {
         register_deactivation_hook( $pluginFilePath, [$this, 'deactivate_{{pluginName}}'] );
     }
 
-    public function setUp_{{pluginName}}(): void {}
+    public function setUp_{{pluginName}}(): void 
+    {
+        //TODO CODE
+    }
 
-    public function hookInit_{{pluginName}}(): void {}
+    public function hookInit_{{pluginName}}(): void 
+    {
+        //TODO CODE
+    }
 
     public function hookPluginsLoaded_{{pluginName}}(): void
     {
-
         $views = new ViewLoader();
-        $views->loadFromYaml($pluginFilePath . '/views.yml', __DIR__);
+        $views->loadFromYaml($this->pluginFilePath . '/config/views.yml', $this->pluginFilePath);
 
         $loader = new AttributeLoader(
             '{{namespace}}\Controller\Route',
@@ -48,7 +55,13 @@ class Boot {
         );
     }
 
-    public function activate_{{pluginName}}(): void {}
+    public function activate_{{pluginName}}(): void 
+    {
+        //TODO CODE
+    }
 
-    public function deactivate_{{pluginName}}(): void {}
+    public function deactivate_{{pluginName}}(): void 
+    {
+        //TODO CODE
+    }
 }
