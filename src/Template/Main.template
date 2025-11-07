@@ -1,8 +1,26 @@
 <?php
+
 namespace {{namespace}};
 
+use WpToolKit\Controller\ViewLoader;
+use WpToolKit\Loader\AttributeLoader;
+
 class Main {
-    public function __construct() {
+    private ViewLoader $views;
+
+    public function __construct(
+        private string $pluginFilePath
+    ) {
+        $this->views = new ViewLoader();
+        $this->views->loadFromYaml($pluginFilePath . '/views.yml', __DIR__);
+
+        $loader = new AttributeLoader(
+            '{{namespace}}\Controller\Route',
+            plugin_dir_path(__FILE__) . 'Controller/Route',
+        );
+
+        $loader->loadRoutes();
+        
         //TODO CODE
     }
 }

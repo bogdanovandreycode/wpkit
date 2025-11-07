@@ -1,20 +1,38 @@
 <?php
 namespace {{namespace}};
 
+use {{namespace}}\Main;
+
 class Boot {
     public function __construct(
         private string $pluginFilePath,
-    )
-    {
+    ) {
+        add_action('init', [$this, hookInit_{{pluginName}}()]);
+
+        add_action('plugins_loaded', function () {
+            load_plugin_textdomain(
+                '{{pluginName}}-plugin',
+                false,
+                '/{{pluginName}}/languages/'
+            );
+
+            $this->hookPluginsLoaded();
+        });
+
         register_activation_hook( $pluginFilePath, [$this, 'activate_{{pluginName}}'] );
         register_deactivation_hook( $pluginFilePath, [$this, 'deactivate_{{pluginName}}'] );
     }
 
-    public static function activate_{{pluginName}}() {
-        //TODO CODE
+    public function setUp_{{pluginName}}(): void {}
+
+    public function hookInit_{{pluginName}}(): void {}
+
+    public function hookPluginsLoaded_{{pluginName}}(): void
+    {
+        new Main($this->$pluginFilePath);
     }
 
-    public static function deactivate_{{pluginName}}() {
-        //TODO CODE
-    }
+    public function activate_{{pluginName}}(): void {}
+
+    public function deactivate_{{pluginName}}(): void {}
 }
