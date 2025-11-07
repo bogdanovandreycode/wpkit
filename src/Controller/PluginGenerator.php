@@ -11,8 +11,7 @@ class PluginGenerator
      */
     public function __construct(
         private array $arguments
-    ) {
-    }
+    ) {}
 
     public function generate(): void
     {
@@ -24,45 +23,51 @@ class PluginGenerator
         }
 
         chdir($baseDir);
-        $this->createComposerProject();
+
         $this->createDirectoryStructure();
-        $this->changeComposerJson();
+        $this->createComposerJson();
+
         TemplateEngine::generate('Main.template', $this->arguments, 'src/Main.php');
         TemplateEngine::generate('Boot.template', $this->arguments, 'src/Boot.php');
-        $pluginName = ArgumentManager::getValueByName($this->arguments, "pluginName");
         TemplateEngine::generate('PluginFile.template', $this->arguments, "{$pluginName}.php");
     }
 
-    private function createComposerProject(): void
+    private function createComposerJson(): void
     {
-        $composerFile = getcwd() . '/composer.json';
-        $pluginName = ArgumentManager::getValueByName($this->arguments, "pluginName");
-        $vendor = ArgumentManager::getValueByName($this->arguments, "vendor");
-        $author = ArgumentManager::getValueByName($this->arguments, "author");
-        $phpVersion = ArgumentManager::getValueByName($this->arguments, "phpVersion");
-        $license = ArgumentManager::getValueByName($this->arguments, "license");
+        $pluginName  = ArgumentManager::getValueByName($this->arguments, "pluginName");
+        $vendor      = ArgumentManager::getValueByName($this->arguments, "vendor");
+        $author      = ArgumentManager::getValueByName($this->arguments, "author");
+        $phpVersion  = ArgumentManager::getValueByName($this->arguments, "phpVersion");
+        $license     = ArgumentManager::getValueByName($this->arguments, "license");
+        $namespace   = ArgumentManager::getValueByName($this->arguments, "namespace");
 
-        if (!file_exists($composerFile)) {
-            shell_exec("composer init --name {$vendor}/{$pluginName} --author \"{$author}\" --type wordpress-plugin --require php:^{$phpVersion} --stability dev --license {$license}");
-        }
-    }
-
-    private function changeComposerJson(): void
-    {
-        $composerJsonPath = getcwd() . '/composer.json';
-
-        if (empty($composerJsonPath)) {
-            return;
-        }
-
-        $composerConfig = json_decode(file_get_contents($composerJsonPath), true);
-        $namespace = ArgumentManager::getValueByName($this->arguments, "namespace");
-        $composerConfig['autoload'] = [
-            'psr-4' => ["{$namespace}\\" => "src/"]
+        $composerConfig = [
+            'name' => "{$vendor}/{$pluginName}",
+            'description' => "WordPress plugin {$pluginName}",
+            'type' => 'wordpress-plugin',
+            'license' => $license,
+            'authors' => [
+                ['name' => $author],
+            ],
+            'require' => [
+                "php" => "^{$phpVersion}",
+                "arraydev/wptoolkit" => "*"
+            ],
+            'autoload' => [
+                'psr-4' => [
+                    "{$namespace}\\" => "src/"
+                ]
+            ],
+            'minimum-stability' => 'stable',
+            'prefer-stable' => true
         ];
 
-        file_put_contents($composerJsonPath, json_encode($composerConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        shell_exec("composer dump-autoload");
+        file_put_contents(
+            getcwd() . '/composer.json',
+            json_encode($composerConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
+
+        shell_exec('composer install --no-interaction --prefer-dist');
     }
 
     private function createDirectoryStructure(): void
@@ -73,7 +78,7 @@ class PluginGenerator
         $this->makeDirectory('assets');
     }
 
-    private function makeDirectory($path): void
+    private function makeDirectory(string $path): void
     {
         $fullPath = getcwd() . '/' . $path;
 
