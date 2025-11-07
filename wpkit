@@ -3,13 +3,16 @@
 
 require_once __DIR__ . '/../../autoload.php';
 
+use Wpkit\Command\RouteCreateCommand;
 use Wpkit\Command\PluginCreateCommand;
 use Wpkit\Command\NamespaceUpdateCommand;
 use Symfony\Component\Console\Application;
-use Wpkit\Command\RouteCreateCommand;
+use Wpkit\Command\PluginCreateFromFileCommand;
 
 $application = new Application();
 $application->add(new PluginCreateCommand());
 $application->add(new NamespaceUpdateCommand());
 $application->add(new RouteCreateCommand());
+$application->add(new PluginCreateFromFileCommand());
+
 $application->run();

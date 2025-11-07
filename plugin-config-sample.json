@@ -1,0 +1,15 @@
+{
+    "pluginName": "awesome-plugin",
+    "vendor": "Your vendor",
+    "author": "Your name",
+    "authorURI": "https://site.io",
+    "namespace": "Arraydev\\Awesome",
+    "description": "Example plugin created from JSON config",
+    "pluginURI": "https://site.io/plugins/awesome",
+    "version": "1.0",
+    "phpVersion": "8.2",
+    "license": "GPL2",
+    "licenseURI": "https://www.gnu.org/licenses/gpl-2.0.html",
+    "textDomain": "awesome-plugin",
+    "domainPath": "/languages"
+}
