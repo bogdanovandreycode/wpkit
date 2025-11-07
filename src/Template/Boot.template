@@ -1,13 +1,15 @@
 <?php
 namespace {{namespace}};
 
+use WpToolKit\Controller\ViewLoader;
+use WpToolKit\Loader\AttributeLoader;
 use {{namespace}}\Main;
 
 class Boot {
     public function __construct(
         private string $pluginFilePath,
     ) {
-        add_action('init', [$this, hookInit_{{pluginName}}()]);
+        add_action('init', [$this, 'hookInit_{{pluginName}}']);
 
         add_action('plugins_loaded', function () {
             load_plugin_textdomain(
@@ -16,7 +18,7 @@ class Boot {
                 '/{{pluginName}}/languages/'
             );
 
-            $this->hookPluginsLoaded();
+            $this->hookPluginsLoaded_{{pluginName}}();
         });
 
         register_activation_hook( $pluginFilePath, [$this, 'activate_{{pluginName}}'] );
@@ -29,7 +31,21 @@ class Boot {
 
     public function hookPluginsLoaded_{{pluginName}}(): void
     {
-        new Main($this->$pluginFilePath);
+
+        $views = new ViewLoader();
+        $views->loadFromYaml($pluginFilePath . '/views.yml', __DIR__);
+
+        $loader = new AttributeLoader(
+            '{{namespace}}\Controller\Route',
+            plugin_dir_path(__FILE__) . 'Controller/Route',
+        );
+
+        $loader->loadRoutes();
+
+        new Main(
+            $this->pluginFilePath,
+            $views
+        );
     }
 
     public function activate_{{pluginName}}(): void {}
