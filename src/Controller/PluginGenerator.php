@@ -27,9 +27,12 @@ class PluginGenerator
         $this->createDirectoryStructure();
         $this->createComposerJson();
 
+        // Генерация файлов из шаблонов
         TemplateEngine::generate('Main.template', $this->arguments, 'src/Main.php');
         TemplateEngine::generate('Boot.template', $this->arguments, 'src/Boot.php');
         TemplateEngine::generate('PluginFile.template', $this->arguments, "{$pluginName}.php");
+        TemplateEngine::generate('ViewsYaml.template', $this->arguments, 'configs/views.yml');
+        TemplateEngine::generate('WelcomeView.template', $this->arguments, 'templates/Welcome.php');
     }
 
     private function createComposerJson(): void
@@ -76,7 +79,8 @@ class PluginGenerator
         $domainPath = ArgumentManager::getValueByName($this->arguments, "domainPath");
         $this->makeDirectory($domainPath);
         $this->makeDirectory('assets');
-        $this->makeDirectory('config');
+        $this->makeDirectory('configs');
+        $this->makeDirectory('templates');
     }
 
     private function makeDirectory(string $path): void

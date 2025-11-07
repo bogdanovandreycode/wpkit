@@ -1,0 +1,5 @@
+<div style="padding: 2rem; font-family: sans-serif;">
+    <h1 style="color: #0073aa;">Welcome to {{pluginName}} plugin!</h1>
+    <p>This is your first view file.</p>
+    <p>Edit this file at <code>/templates/Welcome.php</code> to start customizing your admin pages.</p>
+</div>
