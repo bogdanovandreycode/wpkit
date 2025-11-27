@@ -144,6 +144,16 @@ class ProjectBuildCommand extends Command
         array $ignored,
         OutputInterface $output
     ): void {
+        if (basename($source) === 'build') {
+            return;
+        }
+
+        $normalizedSource = str_replace('\\', '/', realpath($source) ?: $source);
+        $normalizedBuild  = str_replace('\\', '/', realpath(getcwd() . '/build') ?: (getcwd() . '/build'));
+
+        if ($normalizedSource === $normalizedBuild) {
+            return;
+        }
 
         if (!is_dir($destination)) {
             @mkdir($destination, 0755, true);
