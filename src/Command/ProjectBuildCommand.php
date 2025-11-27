@@ -11,6 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProjectBuildCommand extends Command
 {
+    /**
+     * Configure the command options and arguments.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -24,6 +29,13 @@ class ProjectBuildCommand extends Command
             );
     }
 
+    /**
+     * Execute the project build command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $rootDir = getcwd();
@@ -73,6 +85,12 @@ class ProjectBuildCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * Parse the .buildignore file and return an array of ignored paths.
+     *
+     * @param string $filePath
+     * @return array
+     */
     private function getIgnoredPaths(string $filePath): array
     {
         $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -84,6 +102,12 @@ class ProjectBuildCommand extends Command
         return array_map('trim', $lines);
     }
 
+    /**
+     * Recursively delete a folder and all its contents.
+     *
+     * @param string $folder
+     * @return void
+     */
     private function deleteFolder(string $folder): void
     {
         if (!is_dir($folder)) {
@@ -105,6 +129,15 @@ class ProjectBuildCommand extends Command
         @rmdir($folder);
     }
 
+    /**
+     * Copy files from source to destination while respecting ignore patterns.
+     *
+     * @param string $source
+     * @param string $destination
+     * @param array $ignored
+     * @param OutputInterface $output
+     * @return void
+     */
     private function copyFiles(
         string $source,
         string $destination,
@@ -144,6 +177,15 @@ class ProjectBuildCommand extends Command
         }
     }
 
+    /**
+     * Create a ZIP archive from the source directory.
+     *
+     * @param string $source
+     * @param string $destination
+     * @param string $projectName
+     * @param OutputInterface $output
+     * @return bool
+     */
     private function createZipArchive(
         string $source,
         string $destination,

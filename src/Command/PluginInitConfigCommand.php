@@ -9,6 +9,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PluginInitConfigCommand extends Command
 {
+    /**
+     * Configure the command options and arguments.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -22,6 +27,13 @@ class PluginInitConfigCommand extends Command
             );
     }
 
+    /**
+     * Execute the plugin config initialization command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = __DIR__ . '/../../plugin-config-sample.json';

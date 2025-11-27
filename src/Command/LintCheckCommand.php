@@ -10,6 +10,11 @@ use Wpkit\Controller\LintController;
 
 class LintCheckCommand extends Command
 {
+    /**
+     * Configure the command options and arguments.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -23,6 +28,13 @@ class LintCheckCommand extends Command
             );
     }
 
+    /**
+     * Execute the lint check command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $path = $input->getArgument('path');

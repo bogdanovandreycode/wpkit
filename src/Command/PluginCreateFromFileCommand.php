@@ -12,6 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PluginCreateFromFileCommand extends Command
 {
+    /**
+     * Configure the command options and arguments.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -24,6 +29,13 @@ class PluginCreateFromFileCommand extends Command
             );
     }
 
+    /**
+     * Execute the plugin creation from JSON configuration file.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configPath = $input->getArgument('config');

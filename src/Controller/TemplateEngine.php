@@ -9,7 +9,12 @@ class TemplateEngine
     private static string $rootPath = __DIR__ . '/../Template';
 
     /**
+     * Generate a file from a template by replacing placeholders with argument values.
+     *
+     * @param string $templateName
      * @param ArgumentModel[] $arguments
+     * @param string $outputPath
+     * @return void
      */
     public static function generate(
         string $templateName,

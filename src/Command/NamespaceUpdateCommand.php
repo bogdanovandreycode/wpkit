@@ -13,6 +13,11 @@ use RecursiveDirectoryIterator;
 
 class NamespaceUpdateCommand extends Command
 {
+    /**
+     * Configure the command options and arguments.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -25,6 +30,13 @@ class NamespaceUpdateCommand extends Command
             ->addOption('extensions', null, InputOption::VALUE_OPTIONAL, 'Comma-separated list of extensions', 'php');
     }
 
+    /**
+     * Execute the namespace update command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

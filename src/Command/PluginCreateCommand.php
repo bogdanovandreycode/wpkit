@@ -19,6 +19,11 @@ class PluginCreateCommand extends Command
      */
     private array $arguments;
 
+    /**
+     * Build the list of plugin configuration arguments.
+     *
+     * @return void
+     */
     private function buildArguments(): void
     {
         $this->arguments = [
@@ -92,6 +97,11 @@ class PluginCreateCommand extends Command
         ];
     }
 
+    /**
+     * Configure the command options and arguments.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this->setName('plugin:create');
@@ -100,6 +110,13 @@ class PluginCreateCommand extends Command
         $this->buildArguments();
     }
 
+    /**
+     * Execute the plugin creation command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var QuestionHelper $helper */

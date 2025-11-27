@@ -11,6 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RouteCreateCommand extends Command
 {
+    /**
+     * Configure the command options and arguments.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this->setName('route:create')
@@ -18,6 +23,13 @@ class RouteCreateCommand extends Command
             ->setHelp('This command generates a new RouteController file based on template or YAML config.');
     }
 
+    /**
+     * Execute the route creation command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var QuestionHelper $helper */
@@ -53,6 +65,13 @@ class RouteCreateCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * Generate a RouteController class file from template.
+     *
+     * @param array $data
+     * @param OutputInterface $output
+     * @return void
+     */
     private function generateRouteController(array $data, OutputInterface $output): void
     {
         $templatePath = __DIR__ . '/../Template/route.template';

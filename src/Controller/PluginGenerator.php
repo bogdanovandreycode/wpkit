@@ -36,6 +36,11 @@ class PluginGenerator
         TemplateEngine::generate('.buildignore.template', $this->arguments, '.buildignore');
     }
 
+    /**
+     * Create the composer.json file for the plugin.
+     *
+     * @return void
+     */
     private function createComposerJson(): void
     {
         $pluginName  = ArgumentManager::getValueByName($this->arguments, "pluginName");
@@ -74,6 +79,11 @@ class PluginGenerator
         shell_exec('composer install --no-interaction --prefer-dist');
     }
 
+    /**
+     * Create the directory structure for the plugin.
+     *
+     * @return void
+     */
     private function createDirectoryStructure(): void
     {
         $this->makeDirectory('src');
@@ -84,6 +94,12 @@ class PluginGenerator
         $this->makeDirectory('templates');
     }
 
+    /**
+     * Create a directory if it does not exist.
+     *
+     * @param string $path
+     * @return void
+     */
     private function makeDirectory(string $path): void
     {
         $fullPath = getcwd() . '/' . $path;

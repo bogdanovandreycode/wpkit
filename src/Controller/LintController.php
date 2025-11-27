@@ -9,6 +9,13 @@ use FilesystemIterator;
 
 class LintController
 {
+    /**
+     * Check PHP syntax for all PHP files in the given directory.
+     *
+     * @param string $root
+     * @param array $exclude
+     * @return bool
+     */
     public function check(string $root = '.', array $exclude = []): bool
     {
         $exclude = $exclude ?: ['vendor', 'node_modules', 'storage', '.git', 'dist', 'build'];
