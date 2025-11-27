@@ -2,7 +2,6 @@
 
 namespace Wpkit\Command;
 
-use Exception;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\Question;
@@ -24,7 +23,6 @@ class RouteCreateCommand extends Command
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        // Сначала спросим, хочет ли он сгенерировать вручную или по YAML
         $question = new Question("Enter path to YAML file (or leave empty for manual):\n");
         $path = $helper->ask($input, $output, $question);
 
@@ -58,12 +56,13 @@ class RouteCreateCommand extends Command
     private function generateRouteController(array $data, OutputInterface $output): void
     {
         $templatePath = __DIR__ . '/../Template/route.template';
-        $projectRoot = getcwd(); // путь где ты запускаешь wpkit, то есть твой плагин
+        $projectRoot = getcwd();
         $relativePath = 'src/' . str_replace('\\', '/', $data['namespace']);
         $targetPath = $projectRoot . '/' . $relativePath . '/' . $data['className'] . '.php';
 
         if (!file_exists($templatePath)) {
             $output->writeln("<error>Template file not found: {$templatePath}</error>");
+
             return;
         }
 
@@ -79,11 +78,13 @@ class RouteCreateCommand extends Command
         $result = str_replace(array_keys($searchReplace), array_values($searchReplace), $template);
 
         $dir = dirname($targetPath);
+
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
 
         file_put_contents($targetPath, $result);
+
         $output->writeln("<info>RouteController {$data['className']} created at {$targetPath}</info>");
     }
 }

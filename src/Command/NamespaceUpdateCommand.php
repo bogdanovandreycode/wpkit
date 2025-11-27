@@ -37,6 +37,7 @@ class NamespaceUpdateCommand extends Command
 
         if (!is_dir($path)) {
             $io->error("Директория '$path' не найдена.");
+
             return Command::FAILURE;
         }
 
@@ -63,21 +64,18 @@ class NamespaceUpdateCommand extends Command
             $contents = file_get_contents($filePath);
             $original = $contents;
 
-            // use WpToolKit\ → use WpToolKit\v2\
             $contents = preg_replace(
                 '/use\s+WpToolKit\\\\(?!v\d+)([^\s;]+);/',
                 "use WpToolKit\\\\{$version}\\\\\$1;",
                 $contents
             );
 
-            // new WpToolKit\ → new WpToolKit\v2\
             $contents = preg_replace(
                 '/new\s+WpToolKit\\\\(?!v\d+)([^\s\(]+)/',
                 "new WpToolKit\\\\{$version}\\\\\$1",
                 $contents
             );
 
-            // \WpToolKit\ → \WpToolKit\v2\
             $contents = preg_replace(
                 '/\\\\WpToolKit\\\\(?!v\d+)([^\s;]+)/',
                 "\\\\WpToolKit\\\\{$version}\\\\\$1",
@@ -93,12 +91,14 @@ class NamespaceUpdateCommand extends Command
                     if ($createBackup) {
                         copy($filePath, $filePath . '.bak');
                     }
+
                     file_put_contents($filePath, $contents);
                 }
             }
         }
 
         $io->success("Файлов затронуто: {$filesChanged}");
+
         if ($dryRun) {
             $io->note('Это был dry-run, никаких изменений не внесено.');
         }

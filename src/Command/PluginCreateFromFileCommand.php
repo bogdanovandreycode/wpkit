@@ -42,6 +42,7 @@ class PluginCreateFromFileCommand extends Command
         }
 
         $arguments = [];
+
         foreach ($data as $key => $value) {
             $arguments[] = new ArgumentModel($key, '', false, $value);
         }
@@ -50,9 +51,11 @@ class PluginCreateFromFileCommand extends Command
             $generator = new PluginGenerator($arguments);
             $generator->generate();
             $output->writeln("<info>Plugin successfully created from file.</info>");
+
             return Command::SUCCESS;
         } catch (Exception $e) {
             $output->writeln("<error>Error: {$e->getMessage()}</error>");
+
             return Command::FAILURE;
         }
     }

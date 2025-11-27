@@ -133,9 +133,11 @@ class PluginCreateCommand extends Command
             $generator = new PluginGenerator($this->arguments);
             $generator->generate();
             $output->writeln("Plugin is created.");
+
             return Command::SUCCESS;
         } catch (Exception $e) {
             $output->writeln("Error: " . $e->getMessage());
+
             return Command::FAILURE;
         }
     }

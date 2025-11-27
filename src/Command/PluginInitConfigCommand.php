@@ -30,20 +30,24 @@ class PluginInitConfigCommand extends Command
 
         if (!file_exists($source)) {
             $output->writeln("<error>Sample config file not found: {$source}</error>");
+
             return Command::FAILURE;
         }
 
         if (file_exists($destination) && !$force) {
             $output->writeln("<comment>plugin-config.json already exists. Use --force to overwrite.</comment>");
+
             return Command::FAILURE;
         }
 
         if (!copy($source, $destination)) {
             $output->writeln("<error>Failed to copy config file.</error>");
+
             return Command::FAILURE;
         }
 
         $output->writeln("<info>plugin-config.json has been created in current directory.</info>");
+
         return Command::SUCCESS;
     }
 }

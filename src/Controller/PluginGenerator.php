@@ -11,7 +11,8 @@ class PluginGenerator
      */
     public function __construct(
         private array $arguments
-    ) {}
+    ) {
+    }
 
     public function generate(): void
     {
@@ -27,7 +28,6 @@ class PluginGenerator
         $this->createDirectoryStructure();
         $this->createComposerJson();
 
-        // Генерация файлов из шаблонов
         TemplateEngine::generate('Main.template', $this->arguments, 'src/Main.php');
         TemplateEngine::generate('Boot.template', $this->arguments, 'src/Boot.php');
         TemplateEngine::generate('PluginFile.template', $this->arguments, "{$pluginName}.php");
