@@ -15,12 +15,12 @@ class ProjectBuildCommand extends Command
     {
         $this
             ->setName('project:build')
-            ->setDescription('Создаёт production-сборку проекта, используя .buildignore.')
+            ->setDescription('Creates a production build of the project using .buildignore.')
             ->addOption(
                 'zip',
                 'z',
                 InputOption::VALUE_NONE,
-                'Создать ZIP и удалить проектную папку внутри build/'
+                'Create ZIP and remove project folder inside build/'
             );
     }
 
@@ -30,7 +30,7 @@ class ProjectBuildCommand extends Command
         $buildignore = $rootDir . DIRECTORY_SEPARATOR . '.buildignore';
 
         if (!file_exists($buildignore)) {
-            $output->writeln("<error>Файл .buildignore не найден в {$rootDir}. Сборка отменена.</error>");
+            $output->writeln("<error>.buildignore file not found in {$rootDir}. Build cancelled.</error>");
 
             return Command::FAILURE;
         }
@@ -52,17 +52,17 @@ class ProjectBuildCommand extends Command
         $zipOk = $this->createZipArchive($projectBuildDir, $zipFile, $projectName, $output);
 
         if (!$zipOk) {
-            $output->writeln("<error>Сборка прервана на стадии ZIP.</error>");
+            $output->writeln("<error>Build aborted at ZIP stage.</error>");
 
             return Command::FAILURE;
         }
 
         if ($zipFlag) {
-            $output->writeln("🧹 Удаление {$projectBuildDir}");
+            $output->writeln("🧹 Removing {$projectBuildDir}");
             $this->deleteFolder($projectBuildDir);
-            $output->writeln("🧾 Папка проекта удалена (флаг --zip).");
+            $output->writeln("🧾 Project folder removed (--zip flag).");
         } else {
-            $output->writeln("📁 Папка проекта оставлена: {$projectBuildDir}");
+            $output->writeln("📁 Project folder kept: {$projectBuildDir}");
         }
 
         $output->writeln("");
@@ -158,7 +158,7 @@ class ProjectBuildCommand extends Command
 
         $zip = new \ZipArchive();
         if ($zip->open($destination, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-            $output->writeln("<error>Не удалось создать ZIP: {$destination}</error>");
+            $output->writeln("<error>Failed to create ZIP: {$destination}</error>");
 
             return false;
         }

@@ -36,12 +36,12 @@ class LintController
         }
 
         if (!$files) {
-            echo "PHP-файлы не найдены.\n";
+            echo "No PHP files found.\n";
 
             return true;
         }
 
-        echo "Проверяю " . count($files) . " файлов…\n";
+        echo "Checking " . count($files) . " files…\n";
 
         $failed = false;
         foreach ($files as $path) {
@@ -55,12 +55,12 @@ class LintController
         }
 
         if ($failed) {
-            echo "\n❌ Обнаружены синтаксические ошибки.\n";
+            echo "\n❌ Syntax errors detected.\n";
 
             return false;
         }
 
-        echo "✅ Синтаксических ошибок не обнаружено.\n";
+        echo "✅ No syntax errors detected.\n";
 
         return true;
     }

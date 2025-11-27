@@ -17,12 +17,12 @@ class NamespaceUpdateCommand extends Command
     {
         $this
             ->setName('toolkit:namespace-update')
-            ->setDescription('Обновляет namespace WpToolKit на указанную версию во всех PHP-файлах.')
-            ->addArgument('path', InputArgument::REQUIRED, 'Путь до директории плагина (например: src/ или ./)')
-            ->addArgument('version', InputArgument::REQUIRED, 'Версия WPToolkit (например: v2)')
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Не записывать изменения, только показать')
-            ->addOption('backup', null, InputOption::VALUE_NONE, 'Создавать резервную копию .bak перед изменением')
-            ->addOption('extensions', null, InputOption::VALUE_OPTIONAL, 'Список расширений через запятую', 'php');
+            ->setDescription('Updates WpToolKit namespace to the specified version in all PHP files.')
+            ->addArgument('path', InputArgument::REQUIRED, 'Path to plugin directory (e.g., src/ or ./)')
+            ->addArgument('version', InputArgument::REQUIRED, 'WPToolkit version (e.g., v2)')
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Do not write changes, only show them')
+            ->addOption('backup', null, InputOption::VALUE_NONE, 'Create .bak backup before modification')
+            ->addOption('extensions', null, InputOption::VALUE_OPTIONAL, 'Comma-separated list of extensions', 'php');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -36,16 +36,16 @@ class NamespaceUpdateCommand extends Command
         $extensions = explode(',', strtolower($input->getOption('extensions')));
 
         if (!is_dir($path)) {
-            $io->error("Директория '$path' не найдена.");
+            $io->error("Directory '$path' not found.");
 
             return Command::FAILURE;
         }
 
-        $io->section("Обновление namespace WpToolKit → WpToolKit\\{$version}");
-        $io->text("Путь: $path");
+        $io->section("Updating namespace WpToolKit → WpToolKit\\{$version}");
+        $io->text("Path: $path");
         $io->text("Dry-run: " . ($dryRun ? '✅' : '❌'));
         $io->text("Backup: " . ($createBackup ? '✅' : '❌'));
-        $io->text("Фильтр по расширениям: " . implode(', ', $extensions));
+        $io->text("Extension filter: " . implode(', ', $extensions));
 
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
         $filesChanged = 0;
@@ -86,7 +86,7 @@ class NamespaceUpdateCommand extends Command
                 $filesChanged++;
 
                 if ($dryRun) {
-                    $io->writeln("⚠ Изменится: {$filePath}");
+                    $io->writeln("⚠ Will be changed: {$filePath}");
                 } else {
                     if ($createBackup) {
                         copy($filePath, $filePath . '.bak');
@@ -97,10 +97,10 @@ class NamespaceUpdateCommand extends Command
             }
         }
 
-        $io->success("Файлов затронуто: {$filesChanged}");
+        $io->success("Files affected: {$filesChanged}");
 
         if ($dryRun) {
-            $io->note('Это был dry-run, никаких изменений не внесено.');
+            $io->note('This was a dry-run, no changes were made.');
         }
 
         return Command::SUCCESS;
