@@ -33,6 +33,7 @@ class PluginGenerator
         TemplateEngine::generate('PluginFile.template', $this->arguments, "{$pluginName}.php");
         TemplateEngine::generate('ViewsYaml.template', $this->arguments, 'configs/views.yml');
         TemplateEngine::generate('WelcomeView.template', $this->arguments, 'templates/Welcome.php');
+        TemplateEngine::generate('.buildignore.template', $this->arguments, '.buildignore');
     }
 
     private function createComposerJson(): void
