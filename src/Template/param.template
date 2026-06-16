@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WP_Error;
+use WpToolKit\Controller\ParamRoute;
+
+final class {{className}} extends ParamRoute
+{
+    public function __construct()
+    {
+        parent::__construct(
+            {{paramName}},
+            default: {{default}},
+            required: {{required}},
+        );
+    }
+
+    public function validate($param, $request, $key): bool|WP_Error
+    {
+        return true;
+    }
+
+    public function sanitize($param, $request, $key): mixed
+    {
+        return $param;
+    }
+}

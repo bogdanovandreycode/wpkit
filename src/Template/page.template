@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WpToolKit\Attribute\Page;
+use WpToolKit\Controller\AdminPage;
+
+#[Page(
+    {{pageTitle}},
+    {{menuTitle}},
+    {{role}},
+    {{slug}},
+    {{position}},
+    isSubManuItem: {{isSubMenuItem}},
+    parentUrl: {{parentUrl}},
+    icon: {{icon}}
+)]
+final class {{className}} extends AdminPage
+{
+    public function render(): void
+    {
+        echo '<div class="wrap"><h1>' . esc_html({{pageTitle}}) . '</h1></div>';
+    }
+
+    public function callback(): void
+    {
+        // Handle admin POST logic here.
+    }
+}

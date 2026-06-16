@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace {{namespace}};
+namespace AwesomePlugin\Http\Routes;
 
 use WP_REST_Request;
 use WpToolKit\Attribute\Route;
 use WpToolKit\Controller\RouteController;
 
 #[Route(
-    {{routeNamespace}},
-    {{routePath}},
-    params: {{params}},
-    override: {{override}},
-    methods: {{methods}}
+    'awesome-plugin/v1',
+    '/ping',
+    params: [],
+    override: false,
+    methods: 'GET'
 )]
-final class {{className}} extends RouteController
+final class PingRoute extends RouteController
 {
     public function callback(WP_REST_Request $request): mixed
     {

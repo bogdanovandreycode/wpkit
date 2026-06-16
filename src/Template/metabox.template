@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WpToolKit\Attribute\MetaBox;
+use WpToolKit\Controller\MetaBoxController;
+use WpToolKit\Entity\MetaBoxContext;
+use WpToolKit\Entity\MetaBoxPriority;
+
+#[MetaBox(
+    {{id}},
+    {{title}},
+    {{postName}},
+    MetaBoxContext::{{context}},
+    MetaBoxPriority::{{priority}}
+)]
+final class {{className}} extends MetaBoxController
+{
+    public function render($post): void
+    {
+        echo '<p>Meta box content</p>';
+    }
+
+    public function callback($postId): void
+    {
+        // Save meta box data here.
+    }
+}

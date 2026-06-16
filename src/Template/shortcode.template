@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WpToolKit\Attribute\Shortcode;
+use WpToolKit\Controller\ShortcodeController;
+
+#[Shortcode({{name}}, {{atts}})]
+final class {{className}} extends ShortcodeController
+{
+    public function render($atts, $content): string
+    {
+        $atts = $this->getAtts($atts);
+
+        return '<span>' . esc_html((string) ($atts['label'] ?? '')) . '</span>';
+    }
+}

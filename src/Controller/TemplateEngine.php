@@ -34,4 +34,28 @@ class TemplateEngine
 
         file_put_contents($outputPath, $templateContent);
     }
+
+    /**
+     * Generate a file from a template using a key/value map.
+     *
+     * @param array<string, scalar|null> $variables
+     */
+    public static function generateFromMap(
+        string $templateName,
+        array $variables,
+        string $outputPath
+    ): void {
+        $templateContent = file_get_contents(self::$rootPath . '/' . $templateName);
+
+        foreach ($variables as $key => $value) {
+            $templateContent = str_replace('{{' . $key . '}}', (string) $value, $templateContent);
+        }
+
+        $directory = dirname($outputPath);
+        if ($directory !== '.' && !is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        file_put_contents($outputPath, $templateContent);
+    }
 }

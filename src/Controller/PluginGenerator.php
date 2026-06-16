@@ -179,9 +179,12 @@ class PluginGenerator
         $this->makeDirectory('views');
         $this->makeDirectory('src/Admin');
         $this->makeDirectory('src/Hooks');
+        $this->makeDirectory('src/Http/Ajax');
         $this->makeDirectory('src/Http/Params');
         $this->makeDirectory('src/Http/Routes');
+        $this->makeDirectory('src/Shortcodes');
         $this->makeDirectory('src/Service');
+        $this->makeDirectory('src/Widgets');
         $this->makeDirectory(ltrim(
             (string) ArgumentManager::getValueByName($this->arguments, 'domainPath'),
             '/\\'

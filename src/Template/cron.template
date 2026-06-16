@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WpToolKit\Attribute\Cron;
+use WpToolKit\Controller\CronController;
+
+#[Cron({{hookName}}, {{recurrence}}, startTimestamp: {{startTimestamp}})]
+final class {{className}} extends CronController
+{
+    public function handle(): void
+    {
+        // Put cron logic here.
+    }
+}

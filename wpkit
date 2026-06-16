@@ -5,12 +5,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Wpkit\Command\LintCheckCommand;
 use Wpkit\Command\RouteCreateCommand;
+use Wpkit\Command\ScaffoldMakeCommand;
 use Wpkit\Command\PluginCreateCommand;
 use Wpkit\Command\ProjectBuildCommand;
 use Wpkit\Command\NamespaceUpdateCommand;
 use Symfony\Component\Console\Application;
 use Wpkit\Command\PluginInitConfigCommand;
 use Wpkit\Command\PluginCreateFromFileCommand;
+use Wpkit\Controller\ScaffoldCatalog;
 
 $application = new Application();
 $application->add(new PluginCreateCommand());
@@ -20,5 +22,9 @@ $application->add(new PluginCreateFromFileCommand());
 $application->add(new PluginInitConfigCommand());
 $application->add(new LintCheckCommand());
 $application->add(new ProjectBuildCommand());
+
+foreach (ScaffoldCatalog::makeDefinitions() as $definition) {
+    $application->add(new ScaffoldMakeCommand($definition));
+}
 
 $application->run();

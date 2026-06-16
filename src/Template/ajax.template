@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WpToolKit\Attribute\Ajax;
+use WpToolKit\Controller\AjaxController;
+
+#[Ajax({{action}}, allowGuests: {{allowGuests}})]
+final class {{className}} extends AjaxController
+{
+    public function handle(): void
+    {
+        wp_send_json_success([
+            'message' => 'OK',
+        ]);
+    }
+}

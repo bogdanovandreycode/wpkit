@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WpToolKit\Attribute\Filter;
+use WpToolKit\Controller\FilterController;
+
+#[Filter({{hookName}}, priority: {{priority}}, acceptedArgs: {{acceptedArgs}})]
+final class {{className}} extends FilterController
+{
+    public function handle(...$args): mixed
+    {
+        return $args[0] ?? null;
+    }
+}
