@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de34202fd08623e45ddd7a82083d0d2c",
+    "content-hash": "12073d6639e6a7ec1a83432a1a44d5c3",
     "packages": [
+        {
+            "name": "arraydev/wptoolkit",
+            "version": "v1.1.12-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bogdanovandreycode/WPToolkit.git",
+                "reference": "b719d3b59d1d1c9317930383c2b63bed7a278942"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bogdanovandreycode/WPToolkit/zipball/b719d3b59d1d1c9317930383c2b63bed7a278942",
+                "reference": "b719d3b59d1d1c9317930383c2b63bed7a278942",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "symfony/yaml": "^6.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WpToolKit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrey Bogdanov",
+                    "email": "bogdanov.andrey.code@gmail.com"
+                }
+            ],
+            "description": "WP Tool Kit is library for create wordpress plugin.",
+            "support": {
+                "issues": "https://github.com/bogdanovandreycode/WPToolkit/issues",
+                "source": "https://github.com/bogdanovandreycode/WPToolkit/tree/v1.1.12-beta"
+            },
+            "time": "2026-06-05T17:14:56+00:00"
+        },
         {
             "name": "psr/container",
             "version": "2.0.2",
@@ -782,8 +823,10 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
+    "minimum-stability": "beta",
+    "stability-flags": {
+        "arraydev/wptoolkit": 10
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

@@ -16,7 +16,8 @@
     ],
     "require": {
         "symfony/console": "^7.0",
-        "symfony/yaml": "^6.4"
+        "symfony/yaml": "^6.4",
+        "arraydev/wptoolkit": "v1.1.12-beta"
     },
     "minimum-stability": "beta",
     "prefer-stable": true,
