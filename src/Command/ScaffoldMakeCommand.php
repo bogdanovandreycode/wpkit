@@ -125,7 +125,11 @@ class ScaffoldMakeCommand extends Command
                 continue;
             }
 
-            return $this->normalizeFieldValue($field, $rawValue);
+            try {
+                return $this->normalizeFieldValue($field, $rawValue);
+            } catch (\InvalidArgumentException $exception) {
+                $output->writeln("<error>{$exception->getMessage()}</error>");
+            }
         }
     }
 

@@ -240,7 +240,7 @@ final class ScaffoldCatalog
                 'Route namespace',
                 'string',
                 true,
-                static fn (): string => ProjectContextResolver::detectPluginSlug() . '/v1'
+                static fn (string $projectRoot): string => ProjectContextResolver::detectPluginSlug($projectRoot) . '/v1'
             ),
             new ScaffoldFieldModel('routePath', 'Route path', 'string', true, '/ping'),
             new ScaffoldFieldModel('methods', 'HTTP methods', 'string', false, 'GET'),
