@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+namespace AwesomePlugin;
+
+use WpToolKit\Controller\ViewLoader;
+use WpToolKit\Factory\ServiceFactory;
+use WpToolKit\Manager\LifecycleManager;
+
+final class Main
+{
+    public function __construct(
+        private readonly string $pluginFile,
+        private readonly string $pluginDir,
+        private readonly ServiceFactory $container,
+        private readonly ViewLoader $views,
+        private readonly LifecycleManager $lifecycle,
+    ) {
+    }
+
+    public function boot(): void
+    {
+        // Put custom plugin runtime logic here.
+    }
+}

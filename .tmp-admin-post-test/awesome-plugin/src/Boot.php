@@ -1,14 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace {{namespace}};
+namespace AwesomePlugin;
 
-use ReflectionClass;
 use WpToolKit\Controller\ViewLoader;
 use WpToolKit\Factory\ServiceFactory;
 use WpToolKit\Loader\AttributeLoader;
 use WpToolKit\Manager\LifecycleManager;
-use WpToolKit\Controller\PostController;
 
 final class Boot
 {
@@ -64,9 +62,9 @@ final class Boot
     public function onPluginsLoaded(): void
     {
         load_plugin_textdomain(
-            '{{textDomain}}',
+            'awesome-plugin',
             false,
-            dirname(plugin_basename($this->pluginFile)) . '{{domainPath}}',
+            dirname(plugin_basename($this->pluginFile)) . '/languages',
         );
 
         $this->views->loadFromYaml(
@@ -75,13 +73,12 @@ final class Boot
         );
 
         $loader = new AttributeLoader(
-            '{{namespace}}',
+            'AwesomePlugin',
             $this->pluginDir . 'src',
             $this->container,
         );
 
         $loader->loadControllers();
-        $this->loadConventionalControllers();
 
         (new Main(
             $this->pluginFile,
@@ -109,80 +106,5 @@ final class Boot
         $lifecycle = new LifecycleManager();
         self::registerLifecycleCallbacks($lifecycle);
         $lifecycle->uninstall();
-    }
-
-    private function loadConventionalControllers(): void
-    {
-        $this->instantiateControllersFromDirectory(
-            '{{namespace}}\\PostTypes',
-            $this->pluginDir . 'src/PostTypes',
-            PostController::class,
-        );
-    }
-
-    private function instantiateControllersFromDirectory(
-        string $baseNamespace,
-        string $directory,
-        string $parentClass,
-    ): void {
-        if (!is_dir($directory)) {
-            return;
-        }
-
-        foreach ($this->scanPhpFiles($directory) as $file) {
-            require_once $file;
-
-            $className = $this->resolveClassName($baseNamespace, $directory, $file);
-
-            if (!class_exists($className) || !is_subclass_of($className, $parentClass)) {
-                continue;
-            }
-
-            $reflection = new ReflectionClass($className);
-
-            if ($reflection->isAbstract()) {
-                continue;
-            }
-
-            $this->container->make($className);
-        }
-    }
-
-    /**
-     * @return string[]
-     */
-    private function scanPhpFiles(string $directory): array
-    {
-        $files = [];
-
-        foreach (scandir($directory) ?: [] as $item) {
-            if ($item === '.' || $item === '..') {
-                continue;
-            }
-
-            $path = $directory . DIRECTORY_SEPARATOR . $item;
-
-            if (is_dir($path)) {
-                $files = array_merge($files, $this->scanPhpFiles($path));
-                continue;
-            }
-
-            if (str_ends_with($path, '.php')) {
-                $files[] = $path;
-            }
-        }
-
-        return $files;
-    }
-
-    private function resolveClassName(string $baseNamespace, string $directory, string $file): string
-    {
-        $relativePath = str_replace(
-            [$directory, '/', '\\', '.php'],
-            ['', '\\', '\\', ''],
-            $file
-        );
-
-        return rtrim($baseNamespace, '\\') . '\\' . ltrim($relativePath, '\\');
     }
 }

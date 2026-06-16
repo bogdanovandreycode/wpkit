@@ -182,6 +182,7 @@ class PluginGenerator
         $this->makeDirectory('src/Http/Ajax');
         $this->makeDirectory('src/Http/Params');
         $this->makeDirectory('src/Http/Routes');
+        $this->makeDirectory('src/PostTypes');
         $this->makeDirectory('src/Shortcodes');
         $this->makeDirectory('src/Service');
         $this->makeDirectory('src/Widgets');

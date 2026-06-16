@@ -1,0 +1,22 @@
+{
+    "name": "your-vendor/awesome-plugin",
+    "description": "Example plugin created from JSON config",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Your Name"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "arraydev/wptoolkit": "^1.1@beta"
+    },
+    "autoload": {
+        "psr-4": {
+            "AwesomePlugin\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

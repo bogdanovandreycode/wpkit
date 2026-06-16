@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use WpToolKit\Controller\PostController;
+use WpToolKit\Entity\Post;
+
+final class {{className}} extends PostController
+{
+    public function __construct()
+    {
+        parent::__construct(
+            new Post(
+                {{postType}},
+                {{title}},
+                {{icon}},
+                {{role}},
+                {{supports}},
+                public: {{public}},
+                rest: {{rest}},
+                position: {{position}},
+            )
+        );
+
+        // Call $this->addToMenu() here if you want a dedicated top-level menu item.
+    }
+
+    public function renderContent(mixed $content): mixed
+    {
+        return $content;
+    }
+}

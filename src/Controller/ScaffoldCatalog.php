@@ -21,8 +21,10 @@ final class ScaffoldCatalog
             self::makeAjax(),
             self::makeCron(),
             self::makeFilter(),
-            self::makePage(),
+            self::makeAdminPage(),
+            self::makePageAlias(),
             self::makeMetaBox(),
+            self::makePost(),
             self::makeShortcode(),
             self::makeWidget(),
         ];
@@ -131,11 +133,46 @@ final class ScaffoldCatalog
         );
     }
 
-    public static function makePage(): ScaffoldDefinition
+    public static function makeAdminPage(): ScaffoldDefinition
+    {
+        return new ScaffoldDefinition(
+            'make:admin-page',
+            'Create an admin page scaffold.',
+            'page.template',
+            'Admin',
+            'SettingsPage',
+            [
+                new ScaffoldFieldModel('pageTitle', 'Page title', 'string', true, 'Demo Settings'),
+                new ScaffoldFieldModel('menuTitle', 'Menu title', 'string', true, 'Demo Settings'),
+                new ScaffoldFieldModel('role', 'Capability / role', 'string', true, 'manage_options'),
+                new ScaffoldFieldModel('slug', 'Page slug', 'string', true, 'demo-settings'),
+                new ScaffoldFieldModel('position', 'Menu position', 'int', false, '25'),
+                new ScaffoldFieldModel('isSubMenuItem', 'Is submenu item', 'bool', false, 'false'),
+                new ScaffoldFieldModel(
+                    'parentUrl',
+                    'Parent slug or null',
+                    'code',
+                    false,
+                    'null',
+                    [self::class, 'normalizeNullableStringCode']
+                ),
+                new ScaffoldFieldModel(
+                    'icon',
+                    'Dashicon or null',
+                    'code',
+                    false,
+                    'null',
+                    [self::class, 'normalizeNullableStringCode']
+                ),
+            ],
+        );
+    }
+
+    public static function makePageAlias(): ScaffoldDefinition
     {
         return new ScaffoldDefinition(
             'make:page',
-            'Create an admin page scaffold.',
+            'Alias of make:admin-page for backward compatibility.',
             'page.template',
             'Admin',
             'SettingsPage',
@@ -194,6 +231,33 @@ final class ScaffoldCatalog
                     'DEFAULT',
                     [self::class, 'normalizeUppercaseConstant']
                 ),
+            ],
+        );
+    }
+
+    public static function makePost(): ScaffoldDefinition
+    {
+        return new ScaffoldDefinition(
+            'make:post',
+            'Create a custom post type scaffold.',
+            'post.template',
+            'PostTypes',
+            'BookPost',
+            [
+                new ScaffoldFieldModel('postType', 'Post type slug', 'string', true, 'book'),
+                new ScaffoldFieldModel('title', 'Post type title', 'string', true, 'Books'),
+                new ScaffoldFieldModel('icon', 'Dashicon', 'string', false, 'dashicons-book'),
+                new ScaffoldFieldModel('role', 'Capability / role', 'string', false, 'manage_options'),
+                new ScaffoldFieldModel(
+                    'supports',
+                    'Supports as PHP array code',
+                    'code',
+                    false,
+                    "['title', 'editor', 'thumbnail']"
+                ),
+                new ScaffoldFieldModel('public', 'Public post type', 'bool', false, 'true'),
+                new ScaffoldFieldModel('rest', 'Expose in REST API', 'bool', false, 'true'),
+                new ScaffoldFieldModel('position', 'Menu position', 'int', false, '20'),
             ],
         );
     }
