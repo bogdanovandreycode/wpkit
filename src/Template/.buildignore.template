@@ -4,5 +4,6 @@
 .github
 .vscode
 .idea
+.wpkit
 build
 node_modules

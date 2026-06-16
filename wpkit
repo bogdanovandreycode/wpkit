@@ -4,6 +4,16 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Wpkit\Command\LintCheckCommand;
+use Wpkit\Command\AiCheckCommand;
+use Wpkit\Command\AiDiffCommand;
+use Wpkit\Command\AiFindCommand;
+use Wpkit\Command\AiIndexBuildCommand;
+use Wpkit\Command\AiIndexRemoveCommand;
+use Wpkit\Command\AiIndexShowCommand;
+use Wpkit\Command\AiIndexUpdateCommand;
+use Wpkit\Command\AiReadCommand;
+use Wpkit\Command\AiStatusCommand;
+use Wpkit\Command\AiWriteCommand;
 use Wpkit\Command\RouteCreateCommand;
 use Wpkit\Command\ScaffoldMakeCommand;
 use Wpkit\Command\PluginCreateCommand;
@@ -15,6 +25,16 @@ use Wpkit\Command\PluginCreateFromFileCommand;
 use Wpkit\Controller\ScaffoldCatalog;
 
 $application = new Application();
+$application->add(new AiCheckCommand());
+$application->add(new AiDiffCommand());
+$application->add(new AiFindCommand());
+$application->add(new AiIndexBuildCommand());
+$application->add(new AiIndexRemoveCommand());
+$application->add(new AiIndexShowCommand());
+$application->add(new AiIndexUpdateCommand());
+$application->add(new AiReadCommand());
+$application->add(new AiStatusCommand());
+$application->add(new AiWriteCommand());
 $application->add(new PluginCreateCommand());
 $application->add(new NamespaceUpdateCommand());
 $application->add(new RouteCreateCommand());
