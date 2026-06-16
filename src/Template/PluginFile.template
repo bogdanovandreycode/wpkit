@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 Plugin Name: {{pluginName}}
 Plugin URI: {{pluginURI}}
 Description: {{description}}
@@ -10,14 +10,16 @@ License: {{license}}
 License URI: {{licenseURI}}
 Text Domain: {{textDomain}}
 Domain Path: {{domainPath}}
+Requires PHP: {{phpVersion}}
 */
+
+declare(strict_types=1);
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 
 use {{namespace}}\Boot;
 

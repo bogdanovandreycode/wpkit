@@ -27,6 +27,11 @@ class TemplateEngine
             $templateContent = str_replace('{{' . $argument->name . '}}', $argument->value, $templateContent);
         }
 
+        $directory = dirname($outputPath);
+        if ($directory !== '.' && !is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
         file_put_contents($outputPath, $templateContent);
     }
 }

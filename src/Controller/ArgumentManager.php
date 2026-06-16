@@ -41,4 +41,25 @@ class ArgumentManager
 
         return null;
     }
+
+    /**
+     * Set the value of an argument by its name or create it if it does not exist.
+     *
+     * @param ArgumentModel[] $arguments
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public static function setValueByName(array &$arguments, string $name, mixed $value): void
+    {
+        $argument = self::getObjectByName($arguments, $name);
+
+        if ($argument !== null) {
+            $argument->value = $value;
+
+            return;
+        }
+
+        $arguments[] = new ArgumentModel($name, '', false, $value);
+    }
 }

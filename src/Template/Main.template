@@ -1,14 +1,25 @@
 <?php
+declare(strict_types=1);
 
 namespace {{namespace}};
 
 use WpToolKit\Controller\ViewLoader;
+use WpToolKit\Factory\ServiceFactory;
+use WpToolKit\Manager\LifecycleManager;
 
-class Main {
+final class Main
+{
     public function __construct(
-        private string $pluginFilePath,
-        private ViewLoader $views,
-    ) { 
-        //TODO CODE
+        private readonly string $pluginFile,
+        private readonly string $pluginDir,
+        private readonly ServiceFactory $container,
+        private readonly ViewLoader $views,
+        private readonly LifecycleManager $lifecycle,
+    ) {
+    }
+
+    public function boot(): void
+    {
+        // Put custom plugin runtime logic here.
     }
 }

@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wpkit\Command;
 
 use Exception;
 use Wpkit\Model\ArgumentModel;
+use Wpkit\Controller\PluginMetadata;
 use Wpkit\Controller\PluginGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,12 +33,16 @@ class PluginCreateCommand extends Command
         $this->arguments = [
             new ArgumentModel(
                 'pluginName',
-                "PluginName. The name of the plugin, as it will be displayed in the WordPress admin panel",
+                "Plugin Name. The display name shown in the WordPress admin panel",
                 true
             ),
             new ArgumentModel(
+                'pluginSlug',
+                "Plugin Slug. Directory name, main plugin file name and package slug",
+            ),
+            new ArgumentModel(
                 'vendor',
-                "Vendor. The name of the directory where all the libraries and dependencies of your project downloaded via Composer are stored",
+                "Vendor. Composer vendor name for package notation vendor/plugin-slug",
                 true
             ),
             new ArgumentModel(
@@ -48,7 +56,7 @@ class PluginCreateCommand extends Command
             ),
             new ArgumentModel(
                 'namespace',
-                "Namespace. Common namespace for plugin classes",
+                "Namespace. Root PHP namespace for plugin classes",
             ),
             new ArgumentModel(
                 'description',
@@ -62,19 +70,19 @@ class PluginCreateCommand extends Command
                 'version',
                 "Version. The current version of the plugin",
                 false,
-                '1.0'
+                '1.0.0'
             ),
             new ArgumentModel(
                 'phpVersion',
                 "PHP version. Minimum PHP version required to run the plugin",
                 false,
-                '8.0'
+                '8.1'
             ),
             new ArgumentModel(
                 'license',
                 "License. The type of plugin license, most often GPL2",
                 false,
-                'GPL2'
+                'GPL-2.0-or-later'
             ),
             new ArgumentModel(
                 'licenseURI',
@@ -86,7 +94,7 @@ class PluginCreateCommand extends Command
                 'textDomain',
                 "Text Domain. The ID of the text domain for localization of the plugin",
                 false,
-                'text-domain'
+                ''
             ),
             new ArgumentModel(
                 'domainPath',
@@ -107,6 +115,12 @@ class PluginCreateCommand extends Command
         $this->setName('plugin:create');
         $this->setDescription('Creates a new WordPress plugin structure.');
         $this->setHelp('This command allows you to create a new WordPress plugin.');
+        $this->addOption(
+            'install',
+            'i',
+            InputOption::VALUE_NONE,
+            'Run composer install inside the generated plugin after scaffolding.'
+        );
         $this->buildArguments();
     }
 
@@ -127,9 +141,7 @@ class PluginCreateCommand extends Command
         while ($index < $argumentLength) {
             $argument = $this->arguments[$index];
 
-            if ($argument->name == "namespace") {
-                $argument->value = ArgumentManager::getValueByName($this->arguments, 'pluginName');
-            }
+            $this->refreshDerivedDefaults();
 
             $questionText = $argument->required ? '*' : '';
             $questionText .= empty($argument->description) ? "Argument {$argument->value}" : $argument->description;
@@ -147,7 +159,7 @@ class PluginCreateCommand extends Command
         }
 
         try {
-            $generator = new PluginGenerator($this->arguments);
+            $generator = new PluginGenerator($this->arguments, (bool) $input->getOption('install'));
             $generator->generate();
             $output->writeln("Plugin is created.");
 
@@ -156,6 +168,35 @@ class PluginCreateCommand extends Command
             $output->writeln("Error: " . $e->getMessage());
 
             return Command::FAILURE;
+        }
+    }
+
+    private function refreshDerivedDefaults(): void
+    {
+        $pluginName = PluginMetadata::normalizePluginName(
+            (string) ArgumentManager::getValueByName($this->arguments, 'pluginName')
+        );
+
+        if ($pluginName === '') {
+            return;
+        }
+
+        $pluginSlug = PluginMetadata::slugify($pluginName);
+        $namespace = PluginMetadata::namespaceify($pluginName);
+
+        $slugArgument = ArgumentManager::getObjectByName($this->arguments, 'pluginSlug');
+        if ($slugArgument !== null && empty($slugArgument->value)) {
+            $slugArgument->value = $pluginSlug;
+        }
+
+        $namespaceArgument = ArgumentManager::getObjectByName($this->arguments, 'namespace');
+        if ($namespaceArgument !== null && empty($namespaceArgument->value)) {
+            $namespaceArgument->value = $namespace;
+        }
+
+        $textDomainArgument = ArgumentManager::getObjectByName($this->arguments, 'textDomain');
+        if ($textDomainArgument !== null && empty($textDomainArgument->value)) {
+            $textDomainArgument->value = $pluginSlug;
         }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wpkit\Command;
 
 use Exception;
@@ -8,6 +10,7 @@ use Wpkit\Controller\PluginGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PluginCreateFromFileCommand extends Command
@@ -26,6 +29,12 @@ class PluginCreateFromFileCommand extends Command
                 'config',
                 InputArgument::REQUIRED,
                 'Path to the JSON configuration file.'
+            )
+            ->addOption(
+                'install',
+                'i',
+                InputOption::VALUE_NONE,
+                'Run composer install inside the generated plugin after scaffolding.'
             );
     }
 
@@ -60,7 +69,7 @@ class PluginCreateFromFileCommand extends Command
         }
 
         try {
-            $generator = new PluginGenerator($arguments);
+            $generator = new PluginGenerator($arguments, (bool) $input->getOption('install'));
             $generator->generate();
             $output->writeln("<info>Plugin successfully created from file.</info>");
 

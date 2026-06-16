@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wpkit\Command;
 
 use Symfony\Component\Yaml\Yaml;
@@ -34,6 +36,11 @@ class RouteCreateCommand extends Command
     {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
+        $baseNamespace = $this->detectBaseNamespace();
+        $defaultNamespace = $baseNamespace === null
+            ? 'Plugin\\Http\\Routes'
+            : $baseNamespace . '\\Http\\Routes';
+        $defaultRouteNamespace = basename(getcwd()) . '/v1';
 
         $question = new Question("Enter path to YAML file (or leave empty for manual):\n");
         $path = $helper->ask($input, $output, $question);
@@ -46,10 +53,10 @@ class RouteCreateCommand extends Command
             $question = new Question("Class name (e.g., SendEmailConfirmRoute):\n");
             $className = $helper->ask($input, $output, $question);
 
-            $question = new Question("Namespace (e.g., MyPlugin\\Controller\\Route):\n");
+            $question = new Question("Namespace (e.g., {$defaultNamespace}) [{$defaultNamespace}]:\n", $defaultNamespace);
             $namespace = $helper->ask($input, $output, $question);
 
-            $question = new Question("Route namespace (e.g., my-plugin/v1):\n");
+            $question = new Question("Route namespace (e.g., {$defaultRouteNamespace}) [{$defaultRouteNamespace}]:\n", $defaultRouteNamespace);
             $routeNamespace = $helper->ask($input, $output, $question);
 
             $question = new Question("Route path (e.g., /sendEmailConfirmCode):\n");
@@ -76,7 +83,14 @@ class RouteCreateCommand extends Command
     {
         $templatePath = __DIR__ . '/../Template/route.template';
         $projectRoot = getcwd();
-        $relativePath = 'src/' . str_replace('\\', '/', $data['namespace']);
+        $baseNamespace = $this->detectBaseNamespace();
+        $relativeNamespace = $data['namespace'];
+
+        if ($baseNamespace !== null && str_starts_with($relativeNamespace, $baseNamespace . '\\')) {
+            $relativeNamespace = substr($relativeNamespace, strlen($baseNamespace) + 1);
+        }
+
+        $relativePath = 'src/' . str_replace('\\', '/', $relativeNamespace);
         $targetPath = $projectRoot . '/' . $relativePath . '/' . $data['className'] . '.php';
 
         if (!file_exists($templatePath)) {
@@ -105,5 +119,28 @@ class RouteCreateCommand extends Command
         file_put_contents($targetPath, $result);
 
         $output->writeln("<info>RouteController {$data['className']} created at {$targetPath}</info>");
+    }
+
+    private function detectBaseNamespace(): ?string
+    {
+        $composerJson = getcwd() . '/composer.json';
+
+        if (!file_exists($composerJson)) {
+            return null;
+        }
+
+        $data = json_decode((string) file_get_contents($composerJson), true);
+        if (!is_array($data)) {
+            return null;
+        }
+
+        $psr4 = $data['autoload']['psr-4'] ?? null;
+        if (!is_array($psr4) || $psr4 === []) {
+            return null;
+        }
+
+        $namespace = (string) array_key_first($psr4);
+
+        return rtrim($namespace, '\\');
     }
 }

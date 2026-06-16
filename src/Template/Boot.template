@@ -1,67 +1,110 @@
 <?php
+declare(strict_types=1);
+
 namespace {{namespace}};
 
 use WpToolKit\Controller\ViewLoader;
+use WpToolKit\Factory\ServiceFactory;
 use WpToolKit\Loader\AttributeLoader;
-use {{namespace}}\Main;
+use WpToolKit\Manager\LifecycleManager;
 
-class Boot {
+final class Boot
+{
+    private string $pluginDir;
+    private ServiceFactory $container;
+    private ViewLoader $views;
+    private LifecycleManager $lifecycle;
+
     public function __construct(
-        private string $pluginFilePath,
+        private readonly string $pluginFile,
     ) {
-        $this->setUp_{{pluginName}}();
+        $this->pluginDir = plugin_dir_path($this->pluginFile);
+        $this->container = new ServiceFactory();
+        $this->views = new ViewLoader();
+        $this->lifecycle = new LifecycleManager();
 
-        add_action('init', [$this, 'hookInit_{{pluginName}}']);
+        $this->registerServices();
+        $this->registerLifecycleCallbacks($this->lifecycle);
+        $this->registerHooks();
+    }
 
-        add_action('plugins_loaded', function () {
-            load_plugin_textdomain(
-                '{{pluginName}}-plugin',
-                false,
-                '/{{pluginName}}/languages/'
-            );
+    private function registerServices(): void
+    {
+        $this->container->instance(ServiceFactory::class, $this->container);
+        $this->container->instance(ViewLoader::class, $this->views);
+        $this->container->instance(LifecycleManager::class, $this->lifecycle);
+    }
 
-            $this->hookPluginsLoaded_{{pluginName}}();
+    private function registerLifecycleCallbacks(LifecycleManager $lifecycle): void
+    {
+        $lifecycle->onActivate(function (): void {
+            // Register activation callbacks here.
         });
 
-        register_activation_hook( $pluginFilePath, [$this, 'activate_{{pluginName}}'] );
-        register_deactivation_hook( $pluginFilePath, [$this, 'deactivate_{{pluginName}}'] );
+        $lifecycle->onDeactivate(function (): void {
+            // Register deactivation callbacks here.
+        });
+
+        $lifecycle->onUninstall(function (): void {
+            // Register uninstall callbacks here.
+        });
     }
 
-    public function setUp_{{pluginName}}(): void 
+    private function registerHooks(): void
     {
-        //TODO CODE
+        add_action('plugins_loaded', [$this, 'onPluginsLoaded']);
+
+        register_activation_hook($this->pluginFile, [$this, 'activate']);
+        register_deactivation_hook($this->pluginFile, [$this, 'deactivate']);
+        register_uninstall_hook($this->pluginFile, [self::class, 'uninstall']);
     }
 
-    public function hookInit_{{pluginName}}(): void 
+    public function onPluginsLoaded(): void
     {
-        //TODO CODE
-    }
+        load_plugin_textdomain(
+            '{{textDomain}}',
+            false,
+            dirname(plugin_basename($this->pluginFile)) . '{{domainPath}}',
+        );
 
-    public function hookPluginsLoaded_{{pluginName}}(): void
-    {
-        $views = new ViewLoader();
-        $views->loadFromYaml($this->pluginFilePath . '/config/views.yml', $this->pluginFilePath);
+        $this->views->loadFromYaml(
+            $this->pluginDir . 'config/views.yaml',
+            $this->pluginDir,
+        );
 
         $loader = new AttributeLoader(
-            '{{namespace}}\Controller\Route',
-            plugin_dir_path(__FILE__) . 'Controller/Route',
+            '{{namespace}}',
+            $this->pluginDir . 'src',
+            $this->container,
         );
 
-        $loader->loadRoutes();
+        $loader->loadControllers();
 
-        new Main(
-            $this->pluginFilePath,
-            $views
-        );
+        (new Main(
+            $this->pluginFile,
+            $this->pluginDir,
+            $this->container,
+            $this->views,
+            $this->lifecycle,
+        ))->boot();
     }
 
-    public function activate_{{pluginName}}(): void 
+    public function activate(): void
     {
-        //TODO CODE
+        $this->lifecycle->activate();
+        flush_rewrite_rules();
     }
 
-    public function deactivate_{{pluginName}}(): void 
+    public function deactivate(): void
     {
-        //TODO CODE
+        $this->lifecycle->deactivate();
+        flush_rewrite_rules();
+    }
+
+    public static function uninstall(): void
+    {
+        $lifecycle = new LifecycleManager();
+        (new self(__FILE__))->registerLifecycleCallbacks($lifecycle);
+        $lifecycle->uninstall();
     }
 }

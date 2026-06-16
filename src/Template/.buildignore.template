@@ -1,4 +1,8 @@
 .gitignore
 .buildignore
 .git
+.github
 .vscode
+.idea
+build
+node_modules
