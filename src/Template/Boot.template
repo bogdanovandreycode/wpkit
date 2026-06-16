@@ -24,7 +24,7 @@ final class Boot
         $this->lifecycle = new LifecycleManager();
 
         $this->registerServices();
-        $this->registerLifecycleCallbacks($this->lifecycle);
+        self::registerLifecycleCallbacks($this->lifecycle);
         $this->registerHooks();
     }
 
@@ -35,7 +35,7 @@ final class Boot
         $this->container->instance(LifecycleManager::class, $this->lifecycle);
     }
 
-    private function registerLifecycleCallbacks(LifecycleManager $lifecycle): void
+    private static function registerLifecycleCallbacks(LifecycleManager $lifecycle): void
     {
         $lifecycle->onActivate(function (): void {
             // Register activation callbacks here.
@@ -104,7 +104,7 @@ final class Boot
     public static function uninstall(): void
     {
         $lifecycle = new LifecycleManager();
-        (new self(__FILE__))->registerLifecycleCallbacks($lifecycle);
+        self::registerLifecycleCallbacks($lifecycle);
         $lifecycle->uninstall();
     }
 }
