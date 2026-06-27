@@ -7,3 +7,5 @@ composer.phar
 
 *.code-workspace
 /test/*
+/.agents
+/.wpkit
