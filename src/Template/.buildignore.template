@@ -1,9 +1,12 @@
 .gitignore
 .buildignore
+.build.json
 .git
 .github
 .vscode
 .idea
 .wpkit
 build
+vendor
+vendor_scoped
 node_modules

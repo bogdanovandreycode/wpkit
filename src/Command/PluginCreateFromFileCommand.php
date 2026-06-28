@@ -35,6 +35,12 @@ class PluginCreateFromFileCommand extends Command
                 'i',
                 InputOption::VALUE_NONE,
                 'Run composer install inside the generated plugin after scaffolding.'
+            )
+            ->addOption(
+                'demo',
+                null,
+                InputOption::VALUE_NONE,
+                'Generate demo scaffolds regardless of JSON config.'
             );
     }
 
@@ -60,6 +66,10 @@ class PluginCreateFromFileCommand extends Command
         if (json_last_error() !== JSON_ERROR_NONE) {
             $output->writeln("<error>Invalid JSON: " . json_last_error_msg() . "</error>");
             return Command::FAILURE;
+        }
+
+        if ((bool) $input->getOption('demo')) {
+            $data['demo'] = true;
         }
 
         $arguments = [];

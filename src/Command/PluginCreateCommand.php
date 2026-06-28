@@ -102,6 +102,12 @@ class PluginCreateCommand extends Command
                 false,
                 '/languages'
             ),
+            new ArgumentModel(
+                'demo',
+                "Demo data. Generate example post type, metabox, route, view and other scaffolds",
+                false,
+                'false'
+            ),
         ];
     }
 
@@ -120,6 +126,12 @@ class PluginCreateCommand extends Command
             'i',
             InputOption::VALUE_NONE,
             'Run composer install inside the generated plugin after scaffolding.'
+        );
+        $this->addOption(
+            'demo',
+            null,
+            InputOption::VALUE_NONE,
+            'Generate demo scaffolds regardless of the interactive demo answer.'
         );
         $this->buildArguments();
     }
@@ -159,6 +171,10 @@ class PluginCreateCommand extends Command
         }
 
         try {
+            if ((bool) $input->getOption('demo')) {
+                ArgumentManager::setValueByName($this->arguments, 'demo', 'true');
+            }
+
             $generator = new PluginGenerator($this->arguments, (bool) $input->getOption('install'));
             $generator->generate();
             $output->writeln("Plugin is created.");

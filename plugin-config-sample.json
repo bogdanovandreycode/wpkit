@@ -12,5 +12,6 @@
     "license": "GPL-2.0-or-later",
     "licenseURI": "https://www.gnu.org/licenses/gpl-2.0.html",
     "textDomain": "awesome-plugin",
-    "domainPath": "/languages"
+    "domainPath": "/languages",
+    "demo": false
 }

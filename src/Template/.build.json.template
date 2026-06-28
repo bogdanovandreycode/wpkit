@@ -1,0 +1,22 @@
+{
+    "composer": {
+        "installDev": true,
+        "installNoDev": true,
+        "keepComposerFiles": false
+    },
+    "tests": {
+        "enabled": true,
+        "command": "composer test"
+    },
+    "vendor": {
+        "mode": "scoped",
+        "scopedDir": "vendor_scoped",
+        "keepOriginal": false
+    },
+    "zip": {
+        "enabled": true
+    },
+    "cleanup": {
+        "removeBuildDir": false
+    }
+}

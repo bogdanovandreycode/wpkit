@@ -43,6 +43,13 @@ class PluginGenerator
         TemplateEngine::generate('PluginFile.template', $this->arguments, "{$pluginSlug}.php");
         TemplateEngine::generate('ViewsYaml.template', $this->arguments, 'config/views.yaml');
         TemplateEngine::generate('.buildignore.template', $this->arguments, '.buildignore');
+        TemplateEngine::generate('.build.json.template', $this->arguments, '.build.json');
+        TemplateEngine::generate('phpunit.xml.template', $this->arguments, 'phpunit.xml');
+        TemplateEngine::generate('ExampleTest.template', $this->arguments, 'tests/ExampleTest.php');
+
+        if ($this->isDemoEnabled()) {
+            $this->generateDemoScaffolds();
+        }
     }
 
     private function normalizeArguments(): void
@@ -118,6 +125,127 @@ class PluginGenerator
                 (string) ArgumentManager::getValueByName($this->arguments, 'domainPath')
             )
         );
+        ArgumentManager::setValueByName(
+            $this->arguments,
+            'demo',
+            $this->parseBool(ArgumentManager::getValueByName($this->arguments, 'demo')) ? 'true' : 'false'
+        );
+    }
+
+    private function isDemoEnabled(): bool
+    {
+        return $this->parseBool(ArgumentManager::getValueByName($this->arguments, 'demo'));
+    }
+
+    private function parseBool(mixed $value): bool
+    {
+        return filter_var($value, FILTER_VALIDATE_BOOL);
+    }
+
+    private function generateDemoScaffolds(): void
+    {
+        $namespace = (string) ArgumentManager::getValueByName($this->arguments, 'namespace');
+        $pluginSlug = (string) ArgumentManager::getValueByName($this->arguments, 'pluginSlug');
+
+        $this->generateDemoFile('post.template', [
+            'namespace' => "{$namespace}\\PostTypes",
+            'className' => 'DemoBookPost',
+            'postType' => $this->phpString('demo_book'),
+            'title' => $this->phpString('Demo Books'),
+            'icon' => $this->phpString('dashicons-book'),
+            'role' => $this->phpString('manage_options'),
+            'supports' => "['title', 'editor', 'thumbnail']",
+            'public' => 'true',
+            'rest' => 'true',
+            'position' => '20',
+        ], 'src/PostTypes/DemoBookPost.php');
+
+        $this->generateDemoFile('metabox.template', [
+            'namespace' => "{$namespace}\\Admin",
+            'className' => 'DemoBookMetaBox',
+            'id' => $this->phpString('demo_book_details'),
+            'title' => $this->phpString('Demo Book Details'),
+            'postName' => $this->phpString('demo_book'),
+            'context' => 'ADVANCED',
+            'priority' => 'DEFAULT',
+        ], 'src/Admin/DemoBookMetaBox.php');
+
+        $this->generateDemoFile('page.template', [
+            'namespace' => "{$namespace}\\Admin",
+            'className' => 'DemoSettingsPage',
+            'pageTitle' => $this->phpString('Demo Settings'),
+            'menuTitle' => $this->phpString('Demo Settings'),
+            'role' => $this->phpString('manage_options'),
+            'slug' => $this->phpString('demo-settings'),
+            'position' => '25',
+            'isSubMenuItem' => 'false',
+            'parentUrl' => 'null',
+            'icon' => $this->phpString('dashicons-admin-generic'),
+        ], 'src/Admin/DemoSettingsPage.php');
+
+        $this->generateDemoFile('route.template', [
+            'namespace' => "{$namespace}\\Http\\Routes",
+            'className' => 'DemoPingRoute',
+            'routeNamespace' => $this->phpString($pluginSlug . '/v1'),
+            'routePath' => $this->phpString('/demo/ping'),
+            'methods' => $this->phpString('GET'),
+            'params' => '[]',
+            'override' => 'false',
+        ], 'src/Http/Routes/DemoPingRoute.php');
+
+        $this->generateDemoFile('param.template', [
+            'namespace' => "{$namespace}\\Http\\Params",
+            'className' => 'DemoIdParam',
+            'paramName' => $this->phpString('id'),
+            'default' => 'null',
+            'required' => 'false',
+        ], 'src/Http/Params/DemoIdParam.php');
+
+        $this->generateDemoFile('ajax.template', [
+            'namespace' => "{$namespace}\\Http\\Ajax",
+            'className' => 'DemoSyncAjax',
+            'action' => $this->phpString('demo_sync'),
+            'allowGuests' => 'false',
+        ], 'src/Http/Ajax/DemoSyncAjax.php');
+
+        $this->generateDemoFile('action.template', [
+            'namespace' => "{$namespace}\\Hooks",
+            'className' => 'DemoInitAction',
+            'hookName' => $this->phpString('init'),
+            'priority' => '10',
+            'acceptedArgs' => '1',
+        ], 'src/Hooks/DemoInitAction.php');
+
+        $this->generateDemoFile('shortcode.template', [
+            'namespace' => "{$namespace}\\Shortcodes",
+            'className' => 'DemoBadgeShortcode',
+            'name' => $this->phpString('demo_badge'),
+            'atts' => "['label' => 'Demo Badge']",
+        ], 'src/Shortcodes/DemoBadgeShortcode.php');
+
+        $this->generateDemoFile('widget.template', [
+            'namespace' => "{$namespace}\\Widgets",
+            'className' => 'DemoWidget',
+            'idBase' => $this->phpString('demo_widget'),
+            'name' => $this->phpString('Demo Widget'),
+            'description' => $this->phpString('Simple demo widget'),
+        ], 'src/Widgets/DemoWidget.php');
+
+        TemplateEngine::generate('DemoViewsYaml.template', $this->arguments, 'config/views.yaml');
+        TemplateEngine::generate('DemoView.template', $this->arguments, 'views/demo.php');
+    }
+
+    /**
+     * @param array<string, scalar|null> $variables
+     */
+    private function generateDemoFile(string $templateName, array $variables, string $outputPath): void
+    {
+        TemplateEngine::generateFromMap($templateName, $variables, $outputPath);
+    }
+
+    private function phpString(string $value): string
+    {
+        return var_export($value, true);
     }
 
     /**
@@ -152,6 +280,17 @@ class PluginGenerator
                     "{$namespace}\\" => 'src/'
                 ]
             ],
+            'autoload-dev' => [
+                'psr-4' => [
+                    "{$namespace}\\Tests\\" => 'tests/'
+                ]
+            ],
+            'require-dev' => [
+                'phpunit/phpunit' => '^10.5'
+            ],
+            'scripts' => [
+                'test' => 'phpunit'
+            ],
             'minimum-stability' => 'stable',
             'prefer-stable' => true
         ];
@@ -177,6 +316,7 @@ class PluginGenerator
         $this->makeDirectory('assets');
         $this->makeDirectory('config');
         $this->makeDirectory('views');
+        $this->makeDirectory('tests');
         $this->makeDirectory('src/Admin');
         $this->makeDirectory('src/Hooks');
         $this->makeDirectory('src/Http/Ajax');
