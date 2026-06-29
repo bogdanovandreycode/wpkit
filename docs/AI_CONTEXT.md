@@ -10,8 +10,10 @@ Primary tasks:
 
 - create plugin projects
 - generate common WordPress controller classes
+- manage PHP-file translation dictionaries for `WpToolKit\Manager\LocaleManager`
 - prepare tests
 - build production artifacts
+- inspect and edit workspaces through local `ai:*` helper commands
 - optionally scope `WpToolKit` into a plugin namespace to avoid cross-plugin version conflicts
 
 ## Minimal File Map
@@ -22,8 +24,10 @@ Primary tasks:
 - `src/Controller/ScaffoldCatalog.php`: definitions for `make:*` commands.
 - `src/Controller/ScaffoldGenerator.php`: turns scaffold definitions into files.
 - `src/Command/ProjectBuildCommand.php`: build pipeline.
+- `src/Controller/LocaleTranslationController.php`: PHP translation dictionary operations.
 - `src/Template`: all generated file templates.
 - `plugin-config-sample.json`: sample config for `plugin:create-from-file`.
+- `docs/COMMANDS.md`: complete command reference.
 - `docs/ai-skills`: compact task-specific AI skill files.
 
 ## Task Routing
@@ -36,6 +40,8 @@ Use `docs/ai-skills/wpkit-build/SKILL.md` for `.build.json`, `.buildignore`, Com
 
 Use `docs/ai-skills/wpkit-docs/SKILL.md` for documentation updates.
 
+Use `docs/COMMANDS.md` when command names, arguments, options, aliases, or examples need to stay synchronized.
+
 ## Important Conventions
 
 - Generated plugin classes use the plugin namespace from `composer.json`.
@@ -45,3 +51,4 @@ Use `docs/ai-skills/wpkit-docs/SKILL.md` for documentation updates.
 - `.build.json` controls build behavior.
 - New plugins should include PHPUnit setup by default.
 - Demo mode is optional and controlled by `demo` config or `--demo`.
+- Translation dictionaries live under `languages/<locale>/<dictionary>.php` by default and return PHP arrays.

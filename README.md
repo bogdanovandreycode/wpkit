@@ -4,6 +4,38 @@
 
 It scaffolds plugin structure, Composer metadata, PHPUnit tests, build settings, and common WordPress runtime classes such as REST routes, admin pages, meta boxes, custom post types, hooks, shortcodes, widgets, and AJAX handlers.
 
+## Command Overview
+
+Run the current command list:
+
+```bash
+php wpkit list
+```
+
+Project command groups:
+
+- `plugin:*`: create plugins from interactive answers or JSON config.
+- `make:*` and `route:create`: generate runtime classes inside an existing plugin.
+- `language:*`, `locale:*`, and `translation:*`: manage PHP translation dictionaries for `WpToolKit\Manager\LocaleManager`.
+- `project:build`: build production artifacts from `.buildignore` and `.build.json`.
+- `toolkit:namespace-update`: rewrite `WpToolKit` namespace references.
+- `lint:check`: run recursive PHP syntax checks.
+- `ai:*`: local workspace helpers for status, diff, search, file IO, checks, and indexing.
+
+Available project commands:
+
+| Group | Commands |
+| --- | --- |
+| Plugin creation | `plugin:create`, `plugin:create-from-file`, `plugin:init-config` |
+| Scaffolds | `make:route`, `make:param`, `make:action`, `make:ajax`, `make:cron`, `make:filter`, `make:admin-page`, `make:page`, `make:metabox`, `make:post`, `make:shortcode`, `make:widget`, `route:create` |
+| Translations | `language:add`, `language:remove` / `language:delete`, `locale:add` / `translation:add`, `locale:update` / `translation:update`, `locale:remove` / `locale:delete` / `translation:remove` / `translation:delete`, `locale:show` / `translation:show` |
+| Build | `project:build` |
+| Toolkit maintenance | `toolkit:namespace-update` |
+| Linting | `lint:check` |
+| AI helpers | `ai:status`, `ai:diff`, `ai:find`, `ai:read`, `ai:write`, `ai:check`, `ai:index-build`, `ai:index-update`, `ai:index-show`, `ai:index-remove` |
+
+See [Command Reference](docs/COMMANDS.md) for every command, argument, option, and alias.
+
 ## Quick Start
 
 Create a plugin interactively:
@@ -97,6 +129,7 @@ See [Build](docs/BUILD.md) for the full config reference.
 
 ## Documentation
 
+- [Command Reference](docs/COMMANDS.md)
 - [Plugin Creation](docs/PLUGIN_CREATION.md)
 - [Scaffolds](docs/SCAFFOLDS.md)
 - [Build](docs/BUILD.md)

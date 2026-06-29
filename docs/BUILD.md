@@ -98,3 +98,5 @@ php wpkit project:build --vendor-scope=scoped
 php wpkit project:build --vendor-scope=none
 php wpkit project:build --zip
 ```
+
+See [Command Reference](COMMANDS.md#build) for the full CLI entry.

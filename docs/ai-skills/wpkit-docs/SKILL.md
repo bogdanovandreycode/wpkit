@@ -17,6 +17,7 @@ Documentation style:
 
 Important docs:
 
+- `docs/COMMANDS.md`: complete command reference.
 - `docs/PLUGIN_CREATION.md`: plugin config and demo mode.
 - `docs/SCAFFOLDS.md`: `make:*` commands.
 - `docs/BUILD.md`: `.build.json` and build pipeline.

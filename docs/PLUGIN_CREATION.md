@@ -36,6 +36,8 @@ php wpkit plugin:create --demo
 php wpkit plugin:create-from-file plugin-config.json --demo
 ```
 
+See [Command Reference](COMMANDS.md#plugin-creation) for all plugin command arguments and options.
+
 ## Config Fields
 
 `plugin-config.json` supports:

@@ -21,6 +21,8 @@ php wpkit make:widget
 
 `route:create` is kept as a compatibility alias for REST routes.
 
+See [Command Reference](COMMANDS.md#scaffolds) for all scaffold commands and examples.
+
 ## Scaffolds
 
 `make:route` creates a REST route controller in `src/Http/Routes`.
