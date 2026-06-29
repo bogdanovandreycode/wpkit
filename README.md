@@ -40,6 +40,23 @@ A new plugin includes:
 - `.build.json`
 - default folders for admin, hooks, REST, post types, shortcodes, services, widgets, views, config, assets, and translations
 
+## Translation Commands
+
+`wpkit` can manage PHP-file dictionaries used by `WpToolKit\Manager\LocaleManager`.
+
+```bash
+php wpkit language:add en
+php wpkit language:remove en
+
+php wpkit locale:add en payment.maib_payment "Payment via MAIB"
+php wpkit locale:update en payment.maib_payment "MAIB payment"
+php wpkit locale:remove en payment.maib_payment
+php wpkit locale:show payment.maib_payment
+```
+
+The default base directory is `languages`. Use `--base=resources/lang` for a custom translation root.
+Use `--dictionary=request.entity.passenger` when the address is only a key inside a nested dictionary.
+
 When demo mode is enabled, wpkit also generates example classes for:
 
 - custom post type
