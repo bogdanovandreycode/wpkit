@@ -1,9 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Wpkit\Command\LintCheckCommand;
+use Symfony\Component\Console\Application;
 use Wpkit\Command\AiCheckCommand;
 use Wpkit\Command\AiDiffCommand;
 use Wpkit\Command\AiFindCommand;
@@ -16,21 +14,49 @@ use Wpkit\Command\AiStatusCommand;
 use Wpkit\Command\AiWriteCommand;
 use Wpkit\Command\LanguageAddCommand;
 use Wpkit\Command\LanguageRemoveCommand;
+use Wpkit\Command\LintCheckCommand;
 use Wpkit\Command\LocaleAddCommand;
 use Wpkit\Command\LocaleRemoveCommand;
 use Wpkit\Command\LocaleShowCommand;
 use Wpkit\Command\LocaleUpdateCommand;
+use Wpkit\Command\NamespaceUpdateCommand;
+use Wpkit\Command\PluginCreateCommand;
+use Wpkit\Command\PluginCreateFromFileCommand;
+use Wpkit\Command\PluginInitConfigCommand;
+use Wpkit\Command\ProjectBuildCommand;
 use Wpkit\Command\RouteCreateCommand;
 use Wpkit\Command\ScaffoldMakeCommand;
-use Wpkit\Command\PluginCreateCommand;
-use Wpkit\Command\ProjectBuildCommand;
-use Wpkit\Command\NamespaceUpdateCommand;
-use Symfony\Component\Console\Application;
-use Wpkit\Command\PluginInitConfigCommand;
-use Wpkit\Command\PluginCreateFromFileCommand;
 use Wpkit\Controller\ScaffoldCatalog;
 
+$autoloadFiles = [
+    __DIR__ . '/vendor/autoload.php',
+    __DIR__ . '/../../autoload.php',
+];
+
+$autoloadFound = false;
+
+foreach ($autoloadFiles as $autoloadFile) {
+
+    if (file_exists($autoloadFile)) {
+        require_once $autoloadFile;
+        $autoloadFound = true;
+
+        break;
+    }
+}
+
+if (!$autoloadFound) {
+    fwrite(STDERR, "Composer autoload.php not found. Checked:\n");
+
+    foreach ($autoloadFiles as $autoloadFile) {
+        fwrite(STDERR, " - {$autoloadFile}\n");
+    }
+
+    exit(1);
+}
+
 $application = new Application();
+
 $application->add(new AiCheckCommand());
 $application->add(new AiDiffCommand());
 $application->add(new AiFindCommand());
